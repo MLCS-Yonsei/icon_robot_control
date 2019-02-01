@@ -3,7 +3,7 @@ from robotComm import robotControl
 # import face_recognition
 import socket
 
-def main():
+def main(video_src=2):
     # Initiate Face Tracker
     face_tracker = FaceTracker(video_device_id=2, 
                                 enable_age_gender=True,
@@ -46,4 +46,4 @@ def main():
             face_tracker.video_capture.release()
 
 if __name__ == "__main__":
-    main()
+    main(video_src=sys.argv[1])
