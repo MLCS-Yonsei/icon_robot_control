@@ -5,7 +5,7 @@ import socket
 
 def main():
     # Initiate Face Tracker
-    face_tracker = FaceTracker(video_device_id=0, 
+    face_tracker = FaceTracker(video_device_id=1, 
                                 enable_age_gender=True,
                                 age_gender_model_path='./pretrained_models/age_gender/weights-wkfd.hdf5',
                                 age_type="mean")
