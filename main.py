@@ -1,6 +1,7 @@
 from face_tracker import FaceTracker
 from robotComm import robotControl
 # import face_recognition
+import socket
 
 def main():
     # Initiate Face Tracker
