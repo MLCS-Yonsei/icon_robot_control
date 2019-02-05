@@ -32,7 +32,14 @@ class FaceTracker:
         self.mot_tracker = Sort() 
 
         # Initialize some variables
+        '''
+        Face encoding은 depth 1짜리.
+        Face group는 [{'id':['id', 'id2']}]
+        Todo 190205
+        Face group에 들어갈 encoding에 대한 threshold 지정해야할듯.
+        '''
         self.known_face_encodings = []
+        self.known_face_groups = [] #[{'title':"Test",'member':["1"],'encodings':[]}]
         self.known_face_names = []
         self.known_face_times = []
         self.known_face_ids = []
@@ -44,6 +51,8 @@ class FaceTracker:
         self.face_encodings = []
         self.face_names = []
         self.process_this_frame = True
+
+        self.index_in_known_data = []
 
         self.data_remove_time = data_remove_time
 
@@ -164,142 +173,160 @@ class FaceTracker:
         return _target_face_index
 
     def run(self, frame, draw_on_img=True):
-        try:
-            # Resize frame of video to 1/4 size for faster face recognition processing
-            small_frame = cv2.resize(frame, (0, 0), fx=0.25, fy=0.25)
+        self.index_in_known_data = []
+        # Resize frame of video to 1/4 size for faster face recognition processing
+        small_frame = cv2.resize(frame, (0, 0), fx=0.25, fy=0.25)
 
-            # Convert the image from BGR color (which OpenCV uses) to RGB color (which face_recognition uses)
-            rgb_small_frame = small_frame[:, :, ::-1]
+        # Convert the image from BGR color (which OpenCV uses) to RGB color (which face_recognition uses)
+        rgb_small_frame = small_frame[:, :, ::-1]
 
-            # Only process every other frame of video to save time
-            if self.process_this_frame:
-                # Find all the faces and face encodings in the current frame of video
-                # N, E, S, W coordinates
-                # number_of_times_to_upsample가 높을수록 멀리 있는 얼굴 detect. 속도 느려짐
-                # 경험상 3일때 2m~3m
-                
-                self.face_locations = face_recognition.face_locations(rgb_small_frame, number_of_times_to_upsample=1)
-                self.face_locations.sort(key=lambda x: x[3])
-                
-                # Get face images to get age and gender info
-                if self.enable_age_gender:
-                    face_imgs = self._get_face_imgs(rgb_small_frame, self.face_locations)
-                    if len(face_imgs) > 0:
-                        predicted_genders, predicted_ages = self.age_gender_model.predict(face_imgs)
-                        # print(predicted_ages)
+        # Only process every other frame of video to save time
+        if self.process_this_frame:
+            # Find all the faces and face encodings in the current frame of video
+            # N, E, S, W coordinates
+            # number_of_times_to_upsample가 높을수록 멀리 있는 얼굴 detect. 속도 느려짐
+            # 경험상 3일때 2m~3m
+            
+            self.face_locations = face_recognition.face_locations(rgb_small_frame, number_of_times_to_upsample=1)
+            self.face_locations.sort(key=lambda x: x[3])
+            
+            # Get face images to get age and gender info
+            if self.enable_age_gender:
+                face_imgs = self._get_face_imgs(rgb_small_frame, self.face_locations)
+                if len(face_imgs) > 0:
+                    predicted_genders, predicted_ages = self.age_gender_model.predict(face_imgs)
+                    # print(predicted_ages)
 
-                self.face_encodings = face_recognition.face_encodings(rgb_small_frame, self.face_locations)
-                
-                self.face_names = []
+            self.face_encodings = face_recognition.face_encodings(rgb_small_frame, self.face_locations)
+            
+            self.face_names = []
 
-                tracker = self._track(self.face_locations)
-                tracker.sort(key=lambda x: x[0])
+            tracker = self._track(self.face_locations)
+            tracker.sort(key=lambda x: x[0])
 
-                for face_index, face_encoding in enumerate(self.face_encodings):
-                    # See if the face is a match for the known face(s)
-                    matches = face_recognition.compare_faces(self.known_face_encodings, face_encoding, tolerance=0.4)
-                    name = "Unknown"
+            for face_index, face_encoding in enumerate(self.face_encodings):
+                # See if the face is a match for the known face(s)
+                matches = face_recognition.compare_faces(self.known_face_encodings, face_encoding, tolerance=0.4)
+                name = "Unknown"
 
-                    # If a match was found in known_face_encodings, just use the first one.
-                    if True in matches:
-                        first_match_index = matches.index(True)
+                # If a match was found in known_face_encodings, just use the first one.
+                if True in matches:
+                    first_match_index = matches.index(True)
+                    self.index_in_known_data.append(first_match_index)
+                    if self.enable_age_gender:
+                        track_id = self.known_face_names[first_match_index].split("ID:")[1].split(",")[0]
+                        gender = "M" if predicted_genders[face_index][0] > 0.5 else "F"
+                        if self.age_type == "min":
+                            prev_age = int(self.known_face_names[first_match_index].split("A:")[1])
+                            age = int(predicted_ages[face_index] if prev_age > int(predicted_ages[face_index]) else prev_age)
+
+                        elif self.age_type == "real":
+                            age = int(predicted_ages[face_index])
+
+                        elif self.age_type == "mean":
+                            prev_age = int(self.known_face_names[first_match_index].split("A:")[1])
+                            age = round((prev_age * self.known_face_detect_count[first_match_index] + int(predicted_ages[face_index])) / (self.known_face_detect_count[first_match_index]+1))
+
+                        elif self.age_type == "mean_new":
+                            prev_age = int(self.known_face_names[first_match_index].split("A:")[1])
+                            age = round((prev_age * self.known_face_detect_count[first_match_index] + int(predicted_ages[face_index])) / (self.known_face_detect_count[first_match_index]+1))
                         
+                        name = "ID:{}, G:{}, A:{}".format(track_id, gender, age)
+                        
+                        self.known_face_genders[first_match_index] = gender
+                        self.known_face_ages[first_match_index] = age
+                    else:
+                        track_id = self.known_face_names[first_match_index].split("ID:")[1]
+                        name = str(track_id)
+
+                    self.known_face_names[first_match_index] = name
+                    self.known_face_times[first_match_index] = time.time()
+
+                    self.known_face_detect_count[first_match_index] += 1
+                else:
+                    '''
+                    # Select largest box as a target for tracing
+                    known_face_encodings = [face_encodings[select_largest_face(face_locations)]]
+                    known_face_names = ["Target"]
+                    '''
+                    if len(tracker) == len(self.face_locations):
+                        self.known_face_encodings.append(face_encoding)
+                        track_id = str(int(tracker[face_index][4]))
+
+                        # Search for the matching face group
+                        # _group = next(group for group in self.known_face_groups if track_id in group["member"] == True)
+                        _group = list(filter(lambda group: track_id in group["member"], self.known_face_groups))
+                        if len(_group) > 0:
+                            _group[0]['member'].append(track_id)
+                            _group[0]['encodings'].append(face_encoding)
+                            track_id = _group[0]['title']
+
+                            _index = next((index for (index, d) in enumerate(self.known_face_groups) if d["title"] == _group[0]['title']), None)
+                            self.known_face_groups[_index] = _group[0]
+                        else:
+                            _group = {
+                                'title': track_id,
+                                'member': [track_id],
+                                'encodings': [face_encoding]
+                            }
+                            self.known_face_groups.append(_group)
+                        # print(123, _group, track_id)
                         if self.enable_age_gender:
-                            track_id = self.known_face_names[first_match_index].split("ID:")[1].split(",")[0]
                             gender = "M" if predicted_genders[face_index][0] > 0.5 else "F"
-                            if self.age_type == "min":
-                                prev_age = int(self.known_face_names[first_match_index].split("A:")[1])
-                                age = int(predicted_ages[face_index] if prev_age > int(predicted_ages[face_index]) else prev_age)
-
-                            elif self.age_type == "real":
-                                age = int(predicted_ages[face_index])
-
-                            elif self.age_type == "mean":
-                                prev_age = int(self.known_face_names[first_match_index].split("A:")[1])
-                                age = round((prev_age * self.known_face_detect_count[first_match_index] + int(predicted_ages[face_index])) / (self.known_face_detect_count[first_match_index]+1))
-
-                            elif self.age_type == "mean_new":
-                                prev_age = int(self.known_face_names[first_match_index].split("A:")[1])
-                                age = round((prev_age * self.known_face_detect_count[first_match_index] + int(predicted_ages[face_index])) / (self.known_face_detect_count[first_match_index]+1))
-                            
+                            age = int(predicted_ages[face_index])
                             name = "ID:{}, G:{}, A:{}".format(track_id, gender, age)
                             
-                            self.known_face_genders[first_match_index] = gender
-                            self.known_face_ages[first_match_index] = age
+                            self.known_face_genders.append(gender)
+                            self.known_face_ages.append(age)
+                            
                         else:
-                            track_id = self.known_face_names[first_match_index].split("ID:")[1]
-                            name = str(track_id)
+                            name = "ID:{}".format(track_id)
 
-                        self.known_face_names[first_match_index] = name
-                        self.known_face_times[first_match_index] = time.time()
+                        self.known_face_times.append(time.time())
+                        self.known_face_names.append(name)
+                        self.known_face_ids.append(track_id)
+                        self.known_face_detect_count.append(1)
+                        # name = track_id
+                        self.index_in_known_data.append(len(self.known_face_names)-1)
+                    pass
 
-                        self.known_face_detect_count[first_match_index] += 1
-                    else:
-                        '''
-                        # Select largest box as a target for tracing
-                        known_face_encodings = [face_encodings[select_largest_face(face_locations)]]
-                        known_face_names = ["Target"]
-                        '''
-                        if len(tracker) == len(self.face_locations):
-                            self.known_face_encodings.append(face_encoding)
-                            track_id = str(int(tracker[face_index][4]))
+                self.face_names.append(name)
+                # print(known_face_names)
 
-                            if self.enable_age_gender:
-                                gender = "M" if predicted_genders[face_index][0] > 0.5 else "F"
-                                age = int(predicted_ages[face_index])
-                                name = "ID:{}, G:{}, A:{}".format(track_id, gender, age)
-                                
-                                self.known_face_genders.append(gender)
-                                self.known_face_ages.append(age)
-                                
-                            else:
-                                name = "ID:{}".format(track_id)
+            # remove old data
+            self._remove_old_trackers()
 
-                            self.known_face_times.append(time.time())
-                            self.known_face_names.append(name)
-                            self.known_face_ids.append(track_id)
-                            self.known_face_detect_count.append(1)
-                            # name = track_id
-                        
-                        pass
+        # self.process_this_frame = not self.process_this_frame
 
-                    self.face_names.append(name)
-                    # print(known_face_names)
+        if draw_on_img:
+            # Display the results
+            for (top, right, bottom, left), name in zip(self.face_locations, self.face_names):
+                # Scale back up face locations since the frame we detected in was scaled to 1/4 size
+                top *= 4
+                right *= 4
+                bottom *= 4
+                left *= 4
 
-                # remove old data
-                self._remove_old_trackers()
+                # Draw a box around the face
+                cv2.rectangle(frame, (left, top), (right, bottom), (0, 0, 255), 2)
 
-            self.process_this_frame = not self.process_this_frame
+                # Draw a label with a name below the face
+                cv2.rectangle(frame, (left, bottom - 35), (right, bottom), (0, 0, 255), cv2.FILLED)
+                font = cv2.FONT_HERSHEY_DUPLEX
+                cv2.putText(frame, name, (left + 6, bottom - 6), font, 1.0, (255, 255, 255), 1)
 
-            if draw_on_img:
-                # Display the results
-                for (top, right, bottom, left), name in zip(self.face_locations, self.face_names):
-                    # Scale back up face locations since the frame we detected in was scaled to 1/4 size
-                    top *= 4
-                    right *= 4
-                    bottom *= 4
-                    left *= 4
+        if self.video_capture is not None:
+            # Display the resulting image
+            cv2.imshow('Video', frame)
+            # print("--")
+            # Hit 'q' on the keyboard to quit!
+            if cv2.waitKey(1) & 0xFF == ord('q'):
+                return True
 
-                    # Draw a box around the face
-                    cv2.rectangle(frame, (left, top), (right, bottom), (0, 0, 255), 2)
-
-                    # Draw a label with a name below the face
-                    cv2.rectangle(frame, (left, bottom - 35), (right, bottom), (0, 0, 255), cv2.FILLED)
-                    font = cv2.FONT_HERSHEY_DUPLEX
-                    cv2.putText(frame, name, (left + 6, bottom - 6), font, 1.0, (255, 255, 255), 1)
-
-            if self.video_capture is not None:
-                # Display the resulting image
-                cv2.imshow('Video', frame)
-                # print("--")
-                # Hit 'q' on the keyboard to quit!
-                if cv2.waitKey(1) & 0xFF == ord('q'):
-                    return True
-
-            return False# , self.face_locations*4
-        except Exception as ex:
-            print(ex)
-            print("Camera off")
+        return False# , self.face_locations*4
+        # except Exception as ex:
+        #     print(ex)
+        #     print("Camera off")
 
 # moo_image = face_recognition.load_image_file("moo.png")
 # moo_face_encoding = face_recognition.face_encodings(moo_image)[0]
