@@ -9,6 +9,8 @@ import os
 
 def main(video_src=2):
     # Initiate Face Tracker
+    # Todo 190207
+    # os.path에 해당 폴더 없으면 만들기
     face_tracker = FaceTracker(video_device_id=int(video_src), 
                                 enable_age_gender=True,
                                 age_gender_model_path=os.path.join('pretrained_models','age_gender','weights-wkfd.hdf5').replace("\\","/"),

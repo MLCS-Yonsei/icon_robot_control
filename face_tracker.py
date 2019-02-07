@@ -187,7 +187,7 @@ class FaceTracker:
             # number_of_times_to_upsample가 높을수록 멀리 있는 얼굴 detect. 속도 느려짐
             # 경험상 3일때 2m~3m
             
-            self.face_locations = face_recognition.face_locations(rgb_small_frame, number_of_times_to_upsample=1)
+            self.face_locations = face_recognition.face_locations(rgb_small_frame, number_of_times_to_upsample=3)
             self.face_locations.sort(key=lambda x: x[3])
             
             # Get face images to get age and gender info
