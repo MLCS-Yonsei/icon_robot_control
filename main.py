@@ -1,6 +1,6 @@
 from face_tracker import FaceTracker
-from robotComm import RobotControl
-# import face_recognition
+from robot_control import RobotControl
+
 import socket
 import sys 
 import time
