@@ -5,12 +5,13 @@ from social_relation import SocialRelationEstimator
 import socket
 import sys 
 import time
+import os
 
 def main(video_src=2):
     # Initiate Face Tracker
     face_tracker = FaceTracker(video_device_id=int(video_src), 
                                 enable_age_gender=True,
-                                age_gender_model_path='./pretrained_models/age_gender/weights-wkfd.hdf5',
+                                age_gender_model_path=os.path.join('pretrained_models','age_gender','weights-wkfd.hdf5'),
                                 age_type="min")
     social_relation_estimator = SocialRelationEstimator()
     # Initiate some variables
