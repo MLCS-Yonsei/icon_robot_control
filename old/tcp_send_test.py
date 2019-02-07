@@ -34,7 +34,7 @@ if __name__ == '__main__':
         while True:
             try:
                 # _m = input("Msg:")
-                _m = "STX11100111001110011ETX"
+                _m = "STX10050111001110004ETX"
 
                 # 서버로 송신
                 sbuff = bytes(_m, encoding='utf-8')

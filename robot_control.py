@@ -2,10 +2,13 @@ from time import time
 import random
 from src.sender import PollySender
 import threading
+import queue
 
 from src.color_extractor.color_extractor import ImageToColor
 import numpy as np
 import os 
+
+from random_utterance import RandomUtterance
 
 ps = PollySender()
 npz = np.load(os.path.join('src','color_extractor','color_names.npz'))
@@ -20,23 +23,27 @@ def crop_img(img,target):
     endy = int(target['bottomright']['y'])
 
     return img[starty:endy,startx:endx]
-    
+
 class RobotControl:
     def __init__(self, robot_ip, client_socket):
         self.robot_ip = robot_ip
         self.client_socket = client_socket
+        self.robot_listen_q = queue.Queue()
+
+        self.random_utterance = RandomUtterance(self.client_socket, self.robot_listen_q)
 
         if client_socket is not None:
-            def listen(sock):
+            def listen(sock, q):
                 while True:
                     # 서버로부터 수신
                     # time.sleep(0.1)
-                    # print("수신대기")
+                    print("수신대기")
                     rbuff = sock.recv(1024)  # 메시지 수신
                     received = str(rbuff, encoding='utf-8')
+                    q.put(received)
                     print('수신 : {0}'.format(received))
 
-            t = threading.Thread(target=listen, args=(client_socket,))
+            t = threading.Thread(target=listen, args=(client_socket, self.robot_listen_q,))
             t.start()
 
     def _resetVar(self, v):
@@ -289,6 +296,8 @@ class RobotControl:
             _var['robot_hor_movement_time'] = hor_movement_time
             _var['robot_ver_movement_time'] = ver_movement_time
 
+            _m = "".join(['STX',hor_direction,robot_speed,hor_direction,hor_speed,ver_direction,ver_speed,robot_face,'ETX'])
+
         elif move_flag == 1:
             hor_direction = _var['hor_direction']
             ver_direction = _var['ver_direction']
@@ -300,23 +309,20 @@ class RobotControl:
             robot_speed = str(_var['robot_speed']['prev']).zfill(3)
             hor_speed = str(_var['hor_speed']['prev']).zfill(3)
             ver_speed = str(_var['ver_speed']['prev']).zfill(3)
-        
+
+            _m = "".join(['STX',hor_direction,robot_speed,hor_direction,hor_speed,ver_direction,ver_speed,robot_face,'ETX'])
+
         elif move_flag == 2:
-            _var = self._resetVar(_var)
+            self.random_utterance.run()
+            _m = self.random_utterance.msg()
             
-            hor_direction = _var['hor_direction']
-            ver_direction = _var['ver_direction']
-
-            robot_speed = str(_var['robot_speed']['prev']).zfill(3)
-            hor_speed = str(_var['hor_speed']['prev']).zfill(3)
-            ver_speed = str(_var['ver_speed']['prev']).zfill(3)
-
-        _m = "".join(['STX',hor_direction,robot_speed,hor_direction,hor_speed,ver_direction,ver_speed,robot_face,'ETX'])
+        print(_m)
         # _m = str(len(_m)).zfill(4) + _m
         # print(hor_direction, ver_direction)
         # print(_m, hor_direction, ver_direction)
-        print('좌우방향',hor_direction,'좌우스피드',robot_speed,'고개좌우방향',hor_direction,'고개좌우스피드',hor_speed,'고개상하방향',ver_direction,'고개상하스피드',ver_speed,'로보얼굴',robot_face)
+        # print('좌우방향',hor_direction,'좌우스피드',robot_speed,'고개좌우방향',hor_direction,'고개좌우스피드',hor_speed,'고개상하방향',ver_direction,'고개상하스피드',ver_speed,'로보얼굴',robot_face)
         if self.client_socket is not None:
+            print("Sent")
             self.client_socket.send(_m.encode())
 
         # '''
