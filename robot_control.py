@@ -37,11 +37,22 @@ class RobotControl:
                 while True:
                     # 서버로부터 수신
                     # time.sleep(0.1)
-                    print("수신대기")
+                    # print("수신대기")
                     rbuff = sock.recv(1024)  # 메시지 수신
                     received = str(rbuff, encoding='utf-8')
-                    q.put(received)
-                    print('수신 : {0}'.format(received))
+                    received_arr = received.split('STX')[1].split('ETX')[0].split(',')
+                    if len(received_arr) == 5:
+                        result = {
+                            'position':     int(received_arr[0]),
+                            'l_limit' :     int(received_arr[1]),
+                            'r_limit' :     int(received_arr[2]),
+                            'head_hor_pos': int(received_arr[3]),
+                            'head_ver_pos': int(received_arr[4])
+                        }
+                        q.put(result)
+                    else:
+                        print("Wrong data;", received)
+                    # print('수신 : {0}'.format(received))
 
             t = threading.Thread(target=listen, args=(client_socket, self.robot_listen_q,))
             t.start()

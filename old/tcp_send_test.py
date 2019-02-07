@@ -15,13 +15,13 @@ def listen(sock):
 
 
 if __name__ == '__main__':
-    if len(sys.argv) < 4:
-        print('{0} <Bind IP> <Server IP> <Message>'.format(sys.argv[0]))
-        sys.exit()
+    # if len(sys.argv) < 4:
+    #     print('{0} <Bind IP> <Server IP> <Message>'.format(sys.argv[0]))
+    #     sys.exit()
 
-    bindIP = sys.argv[1]
-    serverIP = sys.argv[2]
-    message = sys.argv[3]
+    bindIP = '0.0.0.0'
+    serverIP = '192.168.0.53'
+    message = '11'
 
     sock = socket.socket(socket.AF_INET,
                          socket.SOCK_STREAM)  # SOCK_STREAM은 TCP socket을 뜻함
@@ -34,7 +34,7 @@ if __name__ == '__main__':
         while True:
             try:
                 # _m = input("Msg:")
-                _m = "STX10050111001110004ETX"
+                _m = "STX01050111001110004ETX"
 
                 # 서버로 송신
                 sbuff = bytes(_m, encoding='utf-8')

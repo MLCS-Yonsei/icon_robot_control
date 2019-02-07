@@ -52,7 +52,7 @@ def main(video_src=2):
 
             if len(face_tracker.face_locations) > 0:
                 print(target_face_index, face_tracker.index_in_known_data)
-                if len(face_tracker.index_in_known_data) > 0:
+                if len(face_tracker.index_in_known_data) > 0 and len(face_tracker.index_in_known_data) == len(face_tracker.face_locations):
                     target_face_index_in_db = face_tracker.index_in_known_data[target_face_index] # Data 기반
                     target_face_id = face_tracker.known_face_names[target_face_index_in_db].split("ID:")[1].split(",")[0]
 
