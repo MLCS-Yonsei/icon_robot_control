@@ -101,6 +101,7 @@ def remove_and_update(target_path, source_url):
         with open(_path, 'wb') as f:
             f.write(_audio)
     print("All files are saved.")
+    
 remove_and_update('audio', 'http://hwanmoo.kr/files/icon_audio.zip')
 @app.route('/update', methods=['GET'])
 def update():

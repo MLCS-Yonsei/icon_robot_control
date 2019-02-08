@@ -3,6 +3,7 @@ import cv2
 
 from src.sort.sort import *
 from src.levi_hassner import LeviHassnerNet
+from src.emotion import EmotionNet
 
 import time
 import math
@@ -45,6 +46,8 @@ class FaceTracker:
         self.known_face_ids = []
         self.known_face_ages = []
         self.known_face_genders = []
+        self.known_face_emotions = []
+        self.known_face_emotion_probs = []
         self.known_face_detect_count = []
 
         self.face_locations = []
@@ -59,8 +62,10 @@ class FaceTracker:
         # Load Age/Gender Classification Module
         self.enable_age_gender = enable_age_gender
         if enable_age_gender:
+            self.emotion_model = EmotionNet()
             self.age_gender_model = LeviHassnerNet(image_size=face_size, model_path=age_gender_model_path)
             self.age_type = age_type
+            
 
     def _track(self, face_locations):
         _fl = []
@@ -115,10 +120,10 @@ class FaceTracker:
         resized_img = np.array(resized_img)
         return resized_img #, (x_a, y_a, x_b - x_a, y_b - y_a)
 
-    def _get_face_imgs(self, img, face_locations, face_size=256):
+    def _get_face_imgs(self, img, face_locations, margin=40, face_size=256):
         face_imgs = np.empty((len(face_locations), face_size, face_size, 3))
         for i, b in enumerate(face_locations):
-            _img = self._crop_face(img, (b[3],b[0],b[1]-b[3],b[2]-b[0]),margin=40, size=face_size) / 256.
+            _img = self._crop_face(img, (b[3],b[0],b[1]-b[3],b[2]-b[0]),margin=margin, size=face_size) / 256.
             # _img /= 256.
 
             face_imgs[i,:,:,:] = _img
@@ -194,7 +199,10 @@ class FaceTracker:
             if self.enable_age_gender:
                 face_imgs = self._get_face_imgs(rgb_small_frame, self.face_locations)
                 if len(face_imgs) > 0:
+                    face_imgs_emotion = self._get_face_imgs(rgb_small_frame, self.face_locations, margin=0, face_size=48)
+                    predicted_emotions, predicted_emotion_probs = self.emotion_model.predict(face_imgs_emotion)
                     predicted_genders, predicted_ages = self.age_gender_model.predict(face_imgs)
+                    
                     # print(predicted_ages)
 
             self.face_encodings = face_recognition.face_encodings(rgb_small_frame, self.face_locations)
@@ -216,25 +224,29 @@ class FaceTracker:
                     if self.enable_age_gender:
                         track_id = self.known_face_names[first_match_index].split("ID:")[1].split(",")[0]
                         gender = "M" if predicted_genders[face_index][0] > 0.5 else "F"
+                        emotion = predicted_emotions[face_index]
+                        emotion_prob = predicted_emotion_probs[face_index]
                         if self.age_type == "min":
-                            prev_age = int(self.known_face_names[first_match_index].split("A:")[1])
+                            prev_age = int(self.known_face_names[first_match_index].split("A:")[1].split(',')[0])
                             age = int(predicted_ages[face_index] if prev_age > int(predicted_ages[face_index]) else prev_age)
 
                         elif self.age_type == "real":
                             age = int(predicted_ages[face_index])
 
                         elif self.age_type == "mean":
-                            prev_age = int(self.known_face_names[first_match_index].split("A:")[1])
+                            prev_age = int(self.known_face_names[first_match_index].split("A:")[1].split(',')[0])
                             age = round((prev_age * self.known_face_detect_count[first_match_index] + int(predicted_ages[face_index])) / (self.known_face_detect_count[first_match_index]+1))
 
                         elif self.age_type == "mean_new":
-                            prev_age = int(self.known_face_names[first_match_index].split("A:")[1])
+                            prev_age = int(self.known_face_names[first_match_index].split("A:")[1].split(',')[0])
                             age = round((prev_age * self.known_face_detect_count[first_match_index] + int(predicted_ages[face_index])) / (self.known_face_detect_count[first_match_index]+1))
                         
-                        name = "ID:{}, G:{}, A:{}".format(track_id, gender, age)
+                        name = "ID:{}, G:{}, A:{}, E: {}".format(track_id, gender, age, emotion)
                         
                         self.known_face_genders[first_match_index] = gender
                         self.known_face_ages[first_match_index] = age
+                        self.known_face_emotions[first_match_index] = emotion
+                        self.known_face_emotion_probs[first_match_index] = emotion_prob
                     else:
                         track_id = self.known_face_names[first_match_index].split("ID:")[1]
                         name = "ID:{}".format(str(track_id))
@@ -274,10 +286,15 @@ class FaceTracker:
                         if self.enable_age_gender:
                             gender = "M" if predicted_genders[face_index][0] > 0.5 else "F"
                             age = int(predicted_ages[face_index])
-                            name = "ID:{}, G:{}, A:{}".format(track_id, gender, age)
+                            emotion = predicted_emotions[face_index]
+                            emotion_prob = predicted_emotion_probs[face_index]
+
+                            name = "ID:{}, G:{}, A:{}, E: {}".format(track_id, gender, age, emotion)
                             
                             self.known_face_genders.append(gender)
                             self.known_face_ages.append(age)
+                            self.known_face_emotions.append(emotion)
+                            self.known_face_emotion_probs.append(emotion_prob)
                             
                         else:
                             name = "ID:{}".format(track_id)
@@ -313,7 +330,7 @@ class FaceTracker:
                 # Draw a label with a name below the face
                 cv2.rectangle(frame, (left, bottom - 35), (right, bottom), (0, 0, 255), cv2.FILLED)
                 font = cv2.FONT_HERSHEY_DUPLEX
-                cv2.putText(frame, name, (left + 6, bottom - 6), font, 1.0, (255, 255, 255), 1)
+                cv2.putText(frame, name, (left + 6, bottom - 6), font, 1.0, (80, 80, 80), 1)
 
         if self.video_capture is not None:
             # Display the resulting image
