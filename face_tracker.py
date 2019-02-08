@@ -157,7 +157,7 @@ class FaceTracker:
 
         return index
 
-    def get_relevant_faces(self, index, area_margin=10, distance_margin=2.3):
+    def get_relevant_faces(self, index, area_margin=20, distance_margin=3):
         _target_face_index = []
         _target_face_location = self.face_locations[index]
         _target_face_area = self._get_box_area(_target_face_location)
@@ -166,7 +166,7 @@ class FaceTracker:
         for i, b in enumerate(self.face_locations):
             _a = self._get_box_area(box_location=b)
             _d = self._get_box_distance(b1=_target_face_location, b2=b)
-            # print(_d)
+            print(_d, _a, _target_face_area)
             if _target_face_area * (1+area_margin*0.01) > _a and _a > _target_face_area * (1-area_margin*0.01) and _d < _target_face_width * distance_margin:
                 _target_face_index.append(i)
 
@@ -237,7 +237,7 @@ class FaceTracker:
                         self.known_face_ages[first_match_index] = age
                     else:
                         track_id = self.known_face_names[first_match_index].split("ID:")[1]
-                        name = str(track_id)
+                        name = "ID:{}".format(str(track_id))
 
                     self.known_face_names[first_match_index] = name
                     self.known_face_times[first_match_index] = time.time()
@@ -296,7 +296,7 @@ class FaceTracker:
             # remove old data
             self._remove_old_trackers()
 
-        # self.process_this_frame = not self.process_this_frame
+        self.process_this_frame = not self.process_this_frame
 
         if draw_on_img:
             # Display the results
@@ -321,9 +321,9 @@ class FaceTracker:
             # print("--")
             # Hit 'q' on the keyboard to quit!
             if cv2.waitKey(1) & 0xFF == ord('q'):
-                return True
+                return False
 
-        return False# , self.face_locations*4
+        return not self.process_this_frame# , self.face_locations*4
         # except Exception as ex:
         #     print(ex)
         #     print("Camera off")

@@ -32,6 +32,13 @@ class RobotControl:
 
         self.random_utterance = RandomUtterance(self.client_socket, self.robot_listen_q)
 
+        '''
+        Robot Status
+        0 : 추적 완료
+        1 : 추적중
+        '''
+        self.status = 1
+
         if client_socket is not None:
             def listen(sock, q):
                 while True:
@@ -103,6 +110,8 @@ class RobotControl:
             frame,
             move_flag):
 
+        self.status = 1
+
         _s = 0
         _speed_acc_ratio = 10 # 목표 속도의 현재속도의 1/10 비율로 변화
         target = None
@@ -166,6 +175,7 @@ class RobotControl:
                         hor_direction = '11'
 
                         hor_movement_time = None
+                        self.status = 0
 
             if ver_delta_t is not None:
                 if ver_delta_t < 5:
@@ -228,6 +238,7 @@ class RobotControl:
                 hor_direction = '11'
 
                 hor_movement_time = None
+                self.status = 0
 
             if _vertical_distance_ratio < 0.4:
                 ver_direction = '11'
@@ -309,6 +320,7 @@ class RobotControl:
 
             _m = "".join(['STX',hor_direction,robot_speed,hor_direction,hor_speed,ver_direction,ver_speed,robot_face,'ETX'])
 
+            print('좌우방향',hor_direction,'좌우스피드',robot_speed,'고개좌우방향',hor_direction,'고개좌우스피드',hor_speed,'고개상하방향',ver_direction,'고개상하스피드',ver_speed,'로보얼굴',robot_face)
         elif move_flag == 1:
             hor_direction = _var['hor_direction']
             ver_direction = _var['ver_direction']
@@ -327,11 +339,11 @@ class RobotControl:
             self.random_utterance.run()
             _m = self.random_utterance.msg()
             
-        print(_m)
+        # print(_m)
         # _m = str(len(_m)).zfill(4) + _m
         # print(hor_direction, ver_direction)
         # print(_m, hor_direction, ver_direction)
-        # print('좌우방향',hor_direction,'좌우스피드',robot_speed,'고개좌우방향',hor_direction,'고개좌우스피드',hor_speed,'고개상하방향',ver_direction,'고개상하스피드',ver_speed,'로보얼굴',robot_face)
+        
         if self.client_socket is not None:
             print("Sent")
             self.client_socket.send(_m.encode())

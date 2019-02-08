@@ -9,7 +9,7 @@ from keras.regularizers import l2
 from keras.initializers import zeros, ones, random_normal
 from keras import backend as K
 
-import os.path
+import os
 import urllib.request
 
 sys.setrecursionlimit(2 ** 20)
@@ -35,6 +35,8 @@ class LeviHassnerNet:
             if os.path.isfile(model_path):
                 self.model.load_weights(model_path)
             else:
+                if not os.path.exists(os.path.split(model_path)[0]):
+                    os.makedirs(os.path.split(model_path)[0])
                 print("Downloading Weights...")
                 urllib.request.urlretrieve("http://hwanmoo.kr/files/weights-wkfd.hdf5", model_path)
                 print("Download completed")
