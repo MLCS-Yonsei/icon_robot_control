@@ -59,6 +59,9 @@ class FaceTracker:
 
         self.data_remove_time = data_remove_time
 
+        self.center_location = None
+        
+
         # Load Age/Gender Classification Module
         self.enable_age_gender = enable_age_gender
         if enable_age_gender:
@@ -162,7 +165,7 @@ class FaceTracker:
 
         return index
 
-    def get_relevant_faces(self, index, area_margin=20, distance_margin=3):
+    def get_relevant_faces(self, index, area_margin=20, distance_margin=5):
         _target_face_index = []
         _target_face_location = self.face_locations[index]
         _target_face_area = self._get_box_area(_target_face_location)
@@ -171,11 +174,22 @@ class FaceTracker:
         for i, b in enumerate(self.face_locations):
             _a = self._get_box_area(box_location=b)
             _d = self._get_box_distance(b1=_target_face_location, b2=b)
-            print(_d, _a, _target_face_area)
+            # print(_d, _a, _target_face_area)
             if _target_face_area * (1+area_margin*0.01) > _a and _a > _target_face_area * (1-area_margin*0.01) and _d < _target_face_width * distance_margin:
                 _target_face_index.append(i)
 
         return _target_face_index
+
+    def get_center_location(self, indexes):
+        f1 = self.face_locations[indexes[0]]
+        f2 = self.face_locations[indexes[1]]
+        
+        ns = [f1[0], f2[0]]
+        es = [f1[1], f2[1]]
+        ss = [f1[2], f2[2]]
+        ws = [f1[3], f2[3]]
+
+        return (min(ns), min(es), max(ss), max(ws))
 
     def run(self, frame, draw_on_img=True):
         self.index_in_known_data = []
@@ -270,7 +284,7 @@ class FaceTracker:
                         _group = list(filter(lambda group: track_id in group["member"], self.known_face_groups))
                         if len(_group) > 0:
                             _group[0]['member'].append(track_id)
-                            _group[0]['encodings'].append(face_encoding)
+                            # _group[0]['encodings'].append(face_encoding)
                             track_id = _group[0]['title']
 
                             _index = next((index for (index, d) in enumerate(self.known_face_groups) if d["title"] == _group[0]['title']), None)
@@ -279,7 +293,7 @@ class FaceTracker:
                             _group = {
                                 'title': track_id,
                                 'member': [track_id],
-                                'encodings': [face_encoding]
+                                # 'encodings': [face_encoding]
                             }
                             self.known_face_groups.append(_group)
                         # print(123, _group, track_id)

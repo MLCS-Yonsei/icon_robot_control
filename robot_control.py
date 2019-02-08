@@ -271,15 +271,15 @@ class RobotControl:
             # acc값은 목표 속도와 현재 속도의 차이에 따라 차등 적용 혹은 일정 비율로.
             # (완)
             if _robot_hor_s == 1:
-                robot_speed = 80
+                robot_speed = 60
                 hor_speed = 10
 
             elif _robot_hor_s == 2:
-                robot_speed = 90
+                robot_speed = 70
                 hor_speed = 20
 
             elif _robot_hor_s == 3:
-                robot_speed = 100
+                robot_speed = 80
                 hor_speed = 30
 
             if _robot_ver_s == 1:
@@ -319,12 +319,13 @@ class RobotControl:
             _var['robot_ver_movement_time'] = ver_movement_time
 
             _m = "".join(['STX',hor_direction,robot_speed,hor_direction,hor_speed,ver_direction,ver_speed,robot_face,'ETX'])
+            # _m = "".join(['STX',hor_direction,robot_speed,hor_direction,'000',ver_direction,ver_speed,robot_face,'ETX'])
 
             print('좌우방향',hor_direction,'좌우스피드',robot_speed,'고개좌우방향',hor_direction,'고개좌우스피드',hor_speed,'고개상하방향',ver_direction,'고개상하스피드',ver_speed,'로보얼굴',robot_face)
         elif move_flag == 1:
             hor_direction = _var['hor_direction']
             ver_direction = _var['ver_direction']
-
+            _speed_acc_ratio = _speed_acc_ratio*3
             _var['robot_speed']['prev'] = _var['robot_speed']['prev'] - int(_var['robot_speed']['prev']/_speed_acc_ratio)
             _var['hor_speed']['prev'] = _var['hor_speed']['prev'] - int(_var['hor_speed']['prev']/_speed_acc_ratio)
             _var['ver_speed']['prev'] = _var['ver_speed']['prev'] - int(_var['ver_speed']['prev']/_speed_acc_ratio)
@@ -334,6 +335,7 @@ class RobotControl:
             ver_speed = str(_var['ver_speed']['prev']).zfill(3)
 
             _m = "".join(['STX',hor_direction,robot_speed,hor_direction,hor_speed,ver_direction,ver_speed,robot_face,'ETX'])
+            # _m = "".join(['STX',hor_direction,robot_speed,hor_direction,'000',ver_direction,ver_speed,robot_face,'ETX'])
 
         elif move_flag == 2:
             self.random_utterance.run()

@@ -11,6 +11,7 @@ class SocialRelationEstimator:
         -> ID를 체크해서 계속 같은 대상들을 추적하고 있을 경우, 가장 누적된 것으로 발화 
         '''   
         self.status = 0
+        self.couple_not_cnt = None
 
     def _get_diff(self, l):
         return max(l) - min(l)
@@ -18,7 +19,7 @@ class SocialRelationEstimator:
     def _get_avg(self, l):
         return sum(l) / float(len(l))
 
-    def utterance_for_family(ages, genders):
+    def utterance_for_family(self, ages, genders):
         # if max(ages) > 35
         #     # 부모자식
         # else:
@@ -35,11 +36,12 @@ class SocialRelationEstimator:
         print("utterance_for_kids", ages, genders)
 
     def utterance_for_single(self, age, gender):
-        print("utterance_for_single", age, gender)
+        if self.couple_not_cnt is None:
+            print("utterance_for_single", age, gender)
 
-    def run(self, detect_cnts, ages, genders):
-        print(detect_cnts, ages, genders)
-        if min(detect_cnts) > 10:
+    def run(self, detect_cnts, ages, genders, emotions, emotion_probs):
+        print(detect_cnts, ages, genders, emotions, emotion_probs)
+        if min(detect_cnts) > 30:
             if len(ages) == 1:
                 self.utterance_for_single(ages[0], genders[0])
             elif len(ages) == 2:
