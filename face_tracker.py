@@ -340,7 +340,8 @@ class FaceTracker:
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 return False
 
-        return not self.process_this_frame# , self.face_locations*4
+        # return not self.process_this_frame# , self.face_locations*4
+        return True
         # except Exception as ex:
         #     print(ex)
         #     print("Camera off")
