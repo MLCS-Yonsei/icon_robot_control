@@ -271,11 +271,11 @@ class RobotControl:
             # acc값은 목표 속도와 현재 속도의 차이에 따라 차등 적용 혹은 일정 비율로.
             # (완)
             if _robot_hor_s == 1:
-                robot_speed = 55
+                robot_speed = 80
                 hor_speed = 10
 
             elif _robot_hor_s == 2:
-                robot_speed = 80
+                robot_speed = 90
                 hor_speed = 20
 
             elif _robot_hor_s == 3:
