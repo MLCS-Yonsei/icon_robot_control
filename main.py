@@ -15,7 +15,7 @@ def main(video_src=2):
                                 enable_age_gender=True,
                                 age_gender_model_path=os.path.join('pretrained_models','age_gender','weights-wkfd.hdf5').replace("\\","/"),
                                 age_type="min")
-    social_relation_estimator = SocialRelationEstimator()
+    
     # Initiate some variables
     _var = None
 
@@ -35,6 +35,8 @@ def main(video_src=2):
     target_face_index = None
     target_face_id_in_db = None
     
+    social_relation_estimator = SocialRelationEstimator(robot_ip, update_flag=False)
+
     while True:
         s_time = time.time()
         # Grab a single frame of video
@@ -188,7 +190,7 @@ def main(video_src=2):
                     detect_cnts = [face_tracker.known_face_detect_count[face_tracker.index_in_known_data[i]] for i in relevant_face_index]
                     # print(detect_cnts)
 
-                    social_relation_estimator.run(detect_cnts, ages, genders, emotions, emotion_probs)
+                    social_relation_estimator.run(detect_cnts, ages, genders, emotions, emotion_probs, target_face_id)
                     # print(min(detect_cnts))
                 # if done:
                     # Release handle to the webcam

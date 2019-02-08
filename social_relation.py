@@ -1,11 +1,24 @@
+import os
+import glob
+import time
+import threading
 
+from io import BytesIO
+from zipfile import ZipFile
+from urllib.request import urlopen
+import requests
+import random
 
 class SocialRelationEstimator:
-    def __init__(self):
+    def __init__(self, robot_ip, update_flag=False):
+        # Todo190208
+        # Stage 3에서 끝나고 나면 강제 랜덤 모션
+        # 추적하다가 중도 포기할 알고리즘 2단계에서 다른 사람 등장..? Target_id로 구분?
         '''
         0 : 최초 상태
         1 : 스캔 중
-        2 : 발화 중 
+        2 : 발화 대기
+        3 : 발화중
 
         1일 경우 기존에 tracking 하던게 있는지 우선으로 보고 갈 것.
         -> ID를 체크해서 계속 같은 대상들을 추적하고 있을 경우, 가장 누적된 것으로 발화 
@@ -13,35 +26,159 @@ class SocialRelationEstimator:
         self.status = 0
         self.couple_not_cnt = None
 
+        '''
+        0 : 발화 전 
+        1 : Initiate Joint Attention
+        2 : Ensure Joint Attention
+        3 : Convey Joint Attention
+        4 : Random Movement
+
+        Todo 190208
+        4 완료 후 status 0으로, stage 0 or 1로 
+        4는 랜덤 루틴에서 랜덤 무브만 강제로함. 
+        '''
+        self.stage = 0
+        self.current_relation = None
+        self.target_face_id = None
+
+        if not os.path.exists('audio'):
+            os.makedirs('audio')
+            self._download_audio_files()
+
+        if update_flag == True:
+            self._download_audio_files()
+
+        self.robot_ip = robot_ip
+        self.request_thread = None
+
+    def _download_audio_files(self):
+        if not os.path.exists('audio'):
+            os.makedirs('audio')
+        else:
+            files = glob.glob(os.path.join('audio', '*'))
+            for f in files:
+                os.remove(f)
+
+        print("Downloading audio files...")
+        resp = urlopen('http://hwanmoo.kr/files/icon_audio.zip')
+        print("Download completed")
+        zipfile = ZipFile(BytesIO(resp.read()))
+        for name in zipfile.namelist():
+            _audio = zipfile.read(name)
+            _path = os.path.join('audio', name)
+            with open(_path, 'wb') as f:
+                f.write(_audio)
+        print("All files are saved.")
+
     def _get_diff(self, l):
         return max(l) - min(l)
     
     def _get_avg(self, l):
         return sum(l) / float(len(l))
 
+    def _get_path(self, file_name):
+        return os.path.join('audio',file_name)
+
+    def _send_play_request(self, path):
+        def request_thread(robot_ip, path):
+            if robot_ip is not None:
+                url = "http://"+robot_ip+":3000/play"
+
+                querystring = {"path":path,"speaker":"MJ"}
+
+                response = requests.request("GET", url, params=querystring)
+            else:
+                print("TEST ENV. sleep for 1 secs", path)
+                time.sleep(1)
+
+        if self.request_thread is None or not self.request_thread.isAlive():
+            self.request_thread = threading.Thread(target=request_thread, args=(self.robot_ip,path,))
+            self.request_thread.start()
+            self.status = 3
+
+    def _check_status(self):
+        result = False
+        if self.request_thread is not None and not self.request_thread.isAlive():
+            self.status = 2
+            self.request_thread = None
+
+            result = True
+
+        if self.status < 2:
+            result = True
+
+        print("current status", self.status, "current stage", self.stage, "Thread", self.request_thread, "Result", result)
+        return result
+
+    def _select_audio(self, relation):
+        print("Relation Check", self.current_relation, relation, self.current_relation == relation)
+        if self.current_relation == relation:
+            self.stage += 1
+            
+        else:
+            self.stage = 1
+            self.current_relation = relation
+
+        if self.stage > 3:
+            self.stage = 4
+            print("All stage cleared. Random routine starts.")
+            self.stage = 0
+            self.status = 1
+        else:
+            target_files = glob.glob(os.path.join('audio',relation+str(self.stage)+'*'))
+            # target_file_path = self._get_path(random.choice(target_files))
+            self._send_play_request(random.choice(target_files))
+
     def utterance_for_family(self, ages, genders):
+        '''
+        FAM1xx.wav
+        '''
         # if max(ages) > 35
         #     # 부모자식
         # else:
         #     # 형제/조카
-        print("utterance_for_family", ages, genders)
+        if self._check_status():
+            print("utterance_for_family", ages, genders, self.stage)
 
     def utterance_for_couple(self, ages, genders):
-        print("utterance_for_couple", ages, genders)
+        '''
+        CPL1xx.wav
+        '''
+        if self._check_status():
+            print("utterance_for_couple", ages, genders, self.stage)
 
     def utterance_for_friends(self, ages, genders):
-        print("utterance_for_friends", ages, genders)
+        '''
+        FRD1xx.wav
+        '''
+        if self._check_status():
+            print("utterance_for_friends", ages, genders, self.stage)
 
     def utterance_for_kids(self, ages, genders):
-        print("utterance_for_kids", ages, genders)
+        '''
+        KID1xx.wav
+        '''
+        if self._check_status():
+            print("utterance_for_kids", ages, genders, self.stage)
 
     def utterance_for_single(self, age, gender):
-        if self.couple_not_cnt is None:
-            print("utterance_for_single", age, gender)
+        '''
+        SGL1xx.wav
+        '''
+        if self._check_status() and self.couple_not_cnt is None:
+            print("utterance_for_single", age, gender, self.stage)
+            self._select_audio('SGL')
 
-    def run(self, detect_cnts, ages, genders, emotions, emotion_probs):
+    def _check_consistency(self, new_face_id):
+        if self.target_face_id != new_face_id:
+            self.stage = 0
+            self.target_face_id = new_face_id
+
+    def run(self, detect_cnts, ages, genders, emotions, emotion_probs, target_face_id):
+        self._check_consistency(target_face_id)
+
         print(detect_cnts, ages, genders, emotions, emotion_probs)
-        if min(detect_cnts) > 30:
+        if min(detect_cnts) > 5:
             if len(ages) == 1:
                 self.utterance_for_single(ages[0], genders[0])
             elif len(ages) == 2:
