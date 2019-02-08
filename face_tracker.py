@@ -313,7 +313,7 @@ class FaceTracker:
             # remove old data
             self._remove_old_trackers()
 
-        self.process_this_frame = not self.process_this_frame
+        # self.process_this_frame = not self.process_this_frame
 
         if draw_on_img:
             # Display the results

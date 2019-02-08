@@ -89,7 +89,7 @@ def main(video_src=2):
                                 print("target_face_index_in_db",target_face_index_in_db,face_tracker.index_in_known_data)
                                 # 목표가 사라졌고, 새로운 얼굴이 나타남
                                 if time.time() - target_det_time > 5:
-                                    move_flag = 2
+                                    move_flag = 1
                                     target_face_index = None
                                     target_face_index_in_db = None
                                 else:

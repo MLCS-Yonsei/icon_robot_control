@@ -345,7 +345,7 @@ class RobotControl:
         # print(_m, hor_direction, ver_direction)
         
         if self.client_socket is not None:
-            print("Sent")
+            # print("Sent")
             self.client_socket.send(_m.encode())
 
         # '''
