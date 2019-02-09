@@ -23,6 +23,12 @@ if __name__ == '__main__':
     serverIP = '192.168.0.53'
     message = '11'
 
+    direction = sys.argv[1]
+    if direction == '0':
+        _d = '01'
+    else:
+        _d = '10'
+
     sock = socket.socket(socket.AF_INET,
                          socket.SOCK_STREAM)  # SOCK_STREAM은 TCP socket을 뜻함
     sock.bind((bindIP, 0))
@@ -34,7 +40,7 @@ if __name__ == '__main__':
         while True:
             try:
                 # _m = input("Msg:")
-                _m = "STX01050111001110004ETX"
+                _m = "STX"+_d+"100111001110004ETX"
 
                 # 서버로 송신
                 sbuff = bytes(_m, encoding='utf-8')

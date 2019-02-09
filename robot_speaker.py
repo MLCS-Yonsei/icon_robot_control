@@ -101,8 +101,9 @@ def remove_and_update(target_path, source_url):
     for name in zipfile.namelist():
         _audio = zipfile.read(name)
         _path = os.path.join(dir, target_path, name)
-        with open(_path, 'wb') as f:
-            f.write(_audio)
+        if name[0] != '_':
+            with open(_path, 'wb') as f:
+                f.write(_audio)
     print("All files are saved.")
     
 remove_and_update('audio', 'http://hwanmoo.kr/files/icon_audio.zip')

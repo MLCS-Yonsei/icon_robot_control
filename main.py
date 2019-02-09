@@ -35,7 +35,11 @@ def main(video_src=2):
     target_face_index = None
     target_face_id_in_db = None
     
-    social_relation_estimator = SocialRelationEstimator(robot_control, update_flag=False)
+    if sys.argv[3] == "1":
+        _update_flag = True
+    else:
+        _update_flag = False
+    social_relation_estimator = SocialRelationEstimator(robot_control, update_flag=_update_flag, enable_speaker=True)
 
     while True:
         s_time = time.time()
@@ -189,6 +193,9 @@ def main(video_src=2):
                     emotion_probs = [face_tracker.known_face_emotion_probs[face_tracker.index_in_known_data[i]] for i in relevant_face_index]
                     detect_cnts = [face_tracker.known_face_detect_count[face_tracker.index_in_known_data[i]] for i in relevant_face_index]
                     # print(detect_cnts)
+
+                    # Todo 190209 
+                    # 특정 얼굴 크기 이상일때만 작동하게.
 
                     social_relation_estimator.run(detect_cnts, ages, genders, emotions, emotion_probs, target_face_id)
                     # print(min(detect_cnts))

@@ -170,7 +170,7 @@ class FaceTracker:
         _target_face_location = self.face_locations[index]
         _target_face_area = self._get_box_area(_target_face_location)
         _target_face_width = _target_face_location[1] - _target_face_location[3]
-
+        print("Target face area", _target_face_area)
         for i, b in enumerate(self.face_locations):
             _a = self._get_box_area(box_location=b)
             _d = self._get_box_distance(b1=_target_face_location, b2=b)

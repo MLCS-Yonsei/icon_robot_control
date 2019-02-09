@@ -30,7 +30,7 @@ class RobotControl:
         self.client_socket = client_socket
         self.robot_listen_q = queue.Queue()
 
-        self.random_utterance = RandomUtterance(self.client_socket, self.robot_listen_q)
+        self.random_utterance = RandomUtterance(self, self.robot_listen_q)
 
         '''
         Robot Status
@@ -105,6 +105,10 @@ class RobotControl:
         if self.client_socket is not None:
             # print("Message sent to the robot.")
             self.client_socket.send(msg.encode())
+
+            return True
+        else:
+            return False
 
     def run(self, 
             _var, 

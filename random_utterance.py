@@ -1,8 +1,9 @@
 import time
 import random
+import glob
 
 class RandomUtterance:
-    def __init__(self, robot_socket, robot_listen_queue):   
+    def __init__(self, robot_control, robot_listen_queue):   
         '''
         Random Utterance 상황 flag
         0 : 초기 상태
@@ -12,8 +13,8 @@ class RandomUtterance:
         Flow : 0 -> 1 -> 2 (1 or 2회) -> (Face detect 여부 확인 후) 0 반복
         '''
         self.reset()
-
-        if robot_socket is None:
+        self.robot_ip = robot_control.robot_ip
+        if robot_control.client_socket is None:
             self.robot_listen_q = None
         else:
             self.robot_listen_q = robot_listen_queue
@@ -39,6 +40,8 @@ class RandomUtterance:
         self.listen_time = time.time()
         self.wait_time = None
         self.move_target_seconds = random.uniform(4.5, 7.5)
+
+        self.request_thread = None
 
     def stop_robot(self):
         self.robot_hor_direction = '11'
@@ -108,17 +111,47 @@ class RandomUtterance:
                 # Todo 190207
                 # Random utterance 음성 재생 + 랜덤으로 횟수 1-3
                 # 1 ~ 3회 말함
-                if self.wait_time - time.time() > 0:
-                    # 아직 음성 재생중
-                    print("음성 재생중 : 남은 시간", self.wait_time - time.time())
-                    pass
-                else:
-                    # 음성 재생 완료 
-                    self.wait_time = time.time() + 8 # 이 부분은 음성파일 길이만큼으로 조정 (플러스 버퍼시간)
+                # if self.wait_time - time.time() > 0:
+                #     # 아직 음성 재생중
+                #     print("음성 재생중 : 남은 시간", self.wait_time - time.time())
+                #     pass
+                # else:
+                #     # 음성 재생 완료 
+                #     self.wait_time = time.time() + 8 # 이 부분은 음성파일 길이만큼으로 조정 (플러스 버퍼시간)
+                #     self.cur_speak_cnt += 1
+                #     print("음성 재생 완료: 재생 횟수", self.cur_speak_cnt)
+                if self.request_thread is not None and not self.request_thread.isAlive():
+                    # 발화 종료 
                     self.cur_speak_cnt += 1
-                    print("음성 재생 완료: 재생 횟수", self.cur_speak_cnt)
+                    self.request_thread = None
+                elif self.request_thread is None:
+                    self._send_play_request()
+
             else:
                 # print("리셋")
                 self.reset()
 
         return False
+
+    def _send_play_request(self):
+        target_files = glob.glob(os.path.join('audio','RND'+'*'))
+
+        if len(target_files) == 0:
+            print("No random utterance files.")
+        else:
+            path = random.choice(target_files)
+            
+            def request_thread(robot_ip, path):
+                if robot_ip is not None and self.enable_speaker is True:
+                    url = "http://"+robot_ip+":3000/play"
+
+                    querystring = {"path":path,"speaker":"MJ"}
+
+                    response = requests.request("GET", url, params=querystring)
+                else:
+                    print("TEST ENV. sleep for 1 secs", path)
+                    time.sleep(1)
+
+            if self.request_thread is None or not self.request_thread.isAlive():
+                self.request_thread = threading.Thread(target=request_thread, args=(self.robot_ip,path,))
+                self.request_thread.start()

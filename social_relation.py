@@ -12,7 +12,7 @@ import random
 from random_utterance import RandomUtterance
 
 class SocialRelationEstimator:
-    def __init__(self, robot_control, update_flag=False):
+    def __init__(self, robot_control, update_flag=False, enable_speaker=True):
         # Todo190208
         # Stage 3에서 끝나고 나면 강제 랜덤 모션
         # 추적하다가 중도 포기할 알고리즘 2단계에서 다른 사람 등장..? Target_id로 구분?
@@ -47,6 +47,7 @@ class SocialRelationEstimator:
         self.stage = 0
         self.current_relation = None
         self.target_face_id = None
+        self.last_target_face_id = None
 
         if not os.path.exists('audio'):
             os.makedirs('audio')
@@ -58,6 +59,8 @@ class SocialRelationEstimator:
         self.robot_control = robot_control
         self.robot_ip = robot_control.robot_ip
         self.request_thread = None
+
+        self.enable_speaker = enable_speaker
 
         self.random_utterance = RandomUtterance(None, None)
 
@@ -80,6 +83,12 @@ class SocialRelationEstimator:
                 f.write(_audio)
         print("All files are saved.")
 
+        # 로봇에 업데이트 신호 보내기
+        # localhost:3000/update?path=audio&url=http://hwanmoo.kr/files/icon_audio.zip&flag=0
+        if self.robot_ip is not None:
+            resp = urlopen('http://'+self.robot_ip+':3000/update?path=audio&url=http://hwanmoo.kr/files/icon_audio.zip&flag=0')
+            print("Updated on robot.")
+
     def _get_diff(self, l):
         return max(l) - min(l)
     
@@ -91,7 +100,7 @@ class SocialRelationEstimator:
 
     def _send_play_request(self, path):
         def request_thread(robot_ip, path):
-            if robot_ip is not None:
+            if robot_ip is not None and self.enable_speaker is True:
                 url = "http://"+robot_ip+":3000/play"
 
                 querystring = {"path":path,"speaker":"MJ"}
@@ -133,6 +142,13 @@ class SocialRelationEstimator:
 
     def _select_audio(self, relation):
         print("Relation Check", self.current_relation, relation, self.current_relation == relation)
+        if self.last_target_face_id == self.target_face_id and self.stage == 0:
+            # 마지막에 왔던 사람이 또 옴
+            if self.current_relation == relation:
+                print("또와버렸네.")
+        else:
+            self.last_target_face_id = self.target_face_id
+
         if self.current_relation == relation:
             self.stage += 1
             
@@ -143,13 +159,18 @@ class SocialRelationEstimator:
         if self.stage > 3:
             self.stage = 4
 
+            self.target_face_id = None
             print("All stage cleared. Random routine starts.")
             self._random_movement()
 
             self.stage = 0
             self.status = 1
         else:
-            target_files = glob.glob(os.path.join('audio',relation+str(self.stage)+'*'))
+            if self.stage == 1:
+                # 인사말  
+                target_files = glob.glob(os.path.join('audio','GRT'+'*'))
+            else:
+                target_files = glob.glob(os.path.join('audio',relation+str(self.stage)+'*'))
             if len(target_files) > 0:
                 # target_file_path = self._get_path(random.choice(target_files))
                 self._send_play_request(random.choice(target_files))
@@ -159,13 +180,21 @@ class SocialRelationEstimator:
     def _random_movement(self):
         while True:
             done = self.random_utterance.run()
+            time.sleep(0.5)
             # print(done)
             if done == True:
                 break
             else:
                 _msg = self.random_utterance.msg()
                 print(_msg)
-                self.robot_control.send(_msg)
+                result = self.robot_control.send(_msg)
+                if result == True:
+                    print("Message sent") 
+
+    def _check_consistency(self, new_face_id):
+        if self.target_face_id != new_face_id:
+            self.stage = 0
+            self.target_face_id = new_face_id
 
     def utterance_for_family(self, ages, genders):
         '''
@@ -193,7 +222,11 @@ class SocialRelationEstimator:
         '''
         if self._check_status():
             print("utterance_for_friends", ages, genders, self.stage)
-            self._select_audio('FRD')
+            
+            if ages[0] == "M":
+                self._select_audio('FRM')
+            else:
+                self._select_audio('FRF')
 
     def utterance_for_kids(self, ages, genders):
         '''
@@ -209,12 +242,11 @@ class SocialRelationEstimator:
         '''
         if self._check_status() and self.couple_not_cnt is None:
             print("utterance_for_single", age, gender, self.stage)
-            self._select_audio('SGL')
-
-    def _check_consistency(self, new_face_id):
-        if self.target_face_id != new_face_id:
-            self.stage = 0
-            self.target_face_id = new_face_id
+            
+            if age == "M":
+                self._select_audio('SGM')
+            else:
+                self._select_audio('SGF')
 
     def run(self, detect_cnts, ages, genders, emotions, emotion_probs, target_face_id):
         self._check_consistency(target_face_id)
