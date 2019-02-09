@@ -75,13 +75,15 @@ class RandomUtterance:
 
     def run(self):
         if self.flag == 0:
+            self.reset()
             self.get_direction()
             self.flag = 1 # 다음 루프에서 움직이기 시작함.
 
         elif self.flag == 1:
             # 목표 시간만큼 움직이기
+            # print("time.time() - self.init_time", time.time() - self.init_time)
             if time.time() - self.init_time < self.move_target_seconds:
-                print("Robot moves")
+                # print("Robot moves")
                 self.robot_hor_prev_speed = self.robot_hor_prev_speed + int((self.robot_hor_target_speed - self.robot_hor_prev_speed) / 10)
                 self.robot_head_hor_prev_speed = self.robot_head_hor_prev_speed + int((self.robot_head_hor_target_speed - self.robot_head_hor_prev_speed) / 10)
                 self.robot_ver_prev_speed = self.robot_ver_prev_speed + int((self.robot_ver_target_speed - self.robot_ver_prev_speed) / 10)
@@ -96,6 +98,9 @@ class RandomUtterance:
                 self.cur_speak_cnt = 0
 
                 self.flag = 2
+
+                # Movement가 끝남
+                return True
         elif self.flag == 2:
             # print("Random Utterance, sleep for 8 seconds")
 
@@ -116,4 +121,4 @@ class RandomUtterance:
                 # print("리셋")
                 self.reset()
 
-        
+        return False

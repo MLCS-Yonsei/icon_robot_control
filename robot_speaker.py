@@ -87,9 +87,12 @@ def play():
     return jsonify({}), 200
 
 def remove_and_update(target_path, source_url):
-    files = glob.glob(os.path.join(dir, target_path, '*'))
-    for f in files:
-        os.remove(f)
+    if not os.path.exists(os.path.join(dir, target_path)):
+        os.makedirs(os.path.join(dir, target_path))
+    else:
+        files = glob.glob(os.path.join(dir, target_path, '*'))
+        for f in files:
+            os.remove(f)
 
     print("Downloading audio file...")
     resp = urlopen(source_url)

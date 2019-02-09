@@ -9,8 +9,10 @@ from urllib.request import urlopen
 import requests
 import random
 
+from random_utterance import RandomUtterance
+
 class SocialRelationEstimator:
-    def __init__(self, robot_ip, update_flag=False):
+    def __init__(self, robot_control, update_flag=False):
         # Todo190208
         # Stage 3에서 끝나고 나면 강제 랜덤 모션
         # 추적하다가 중도 포기할 알고리즘 2단계에서 다른 사람 등장..? Target_id로 구분?
@@ -19,12 +21,15 @@ class SocialRelationEstimator:
         1 : 스캔 중
         2 : 발화 대기
         3 : 발화중
+        4 : 발화 중간 대기 - wait_time과 연동
 
         1일 경우 기존에 tracking 하던게 있는지 우선으로 보고 갈 것.
         -> ID를 체크해서 계속 같은 대상들을 추적하고 있을 경우, 가장 누적된 것으로 발화 
         '''   
         self.status = 0
         self.couple_not_cnt = None
+        self.wait_time = None
+        self.wait_secs = 5 # 대기할 시간
 
         '''
         0 : 발화 전 
@@ -48,8 +53,11 @@ class SocialRelationEstimator:
         if update_flag == True:
             self._download_audio_files()
 
-        self.robot_ip = robot_ip
+        self.robot_control = robot_control
+        self.robot_ip = robot_control.robot_ip
         self.request_thread = None
+
+        self.random_utterance = RandomUtterance(None, None)
 
     def _download_audio_files(self):
         if not os.path.exists('audio'):
@@ -94,11 +102,13 @@ class SocialRelationEstimator:
         if self.request_thread is None or not self.request_thread.isAlive():
             self.request_thread = threading.Thread(target=request_thread, args=(self.robot_ip,path,))
             self.request_thread.start()
+            # 발화 시작, 종료 후 4로 전환하고 n초만큼 대기. 
             self.status = 3
 
     def _check_status(self):
         result = False
         if self.request_thread is not None and not self.request_thread.isAlive():
+            # 발화 종료됨. n초만큼 대기 후 status 2로 변경
             self.status = 2
             self.request_thread = None
 
@@ -118,16 +128,29 @@ class SocialRelationEstimator:
         else:
             self.stage = 1
             self.current_relation = relation
-
+        
         if self.stage > 3:
             self.stage = 4
+
             print("All stage cleared. Random routine starts.")
+            self._random_movement()
+
             self.stage = 0
             self.status = 1
         else:
             target_files = glob.glob(os.path.join('audio',relation+str(self.stage)+'*'))
             # target_file_path = self._get_path(random.choice(target_files))
             self._send_play_request(random.choice(target_files))
+
+    def _random_movement(self):
+        while True:
+            done = self.random_utterance.run()
+            print(done)
+            if done == True:
+                break
+            else:
+                _msg = self.random_utterance.msg()
+                self.robot_control.send(_msg)
 
     def utterance_for_family(self, ages, genders):
         '''
@@ -139,6 +162,7 @@ class SocialRelationEstimator:
         #     # 형제/조카
         if self._check_status():
             print("utterance_for_family", ages, genders, self.stage)
+            self._select_audio('FAM')
 
     def utterance_for_couple(self, ages, genders):
         '''
@@ -146,6 +170,7 @@ class SocialRelationEstimator:
         '''
         if self._check_status():
             print("utterance_for_couple", ages, genders, self.stage)
+            self._select_audio('CPL')
 
     def utterance_for_friends(self, ages, genders):
         '''
@@ -153,6 +178,7 @@ class SocialRelationEstimator:
         '''
         if self._check_status():
             print("utterance_for_friends", ages, genders, self.stage)
+            self._select_audio('FRD')
 
     def utterance_for_kids(self, ages, genders):
         '''
@@ -160,6 +186,7 @@ class SocialRelationEstimator:
         '''
         if self._check_status():
             print("utterance_for_kids", ages, genders, self.stage)
+            self._select_audio('KID')
 
     def utterance_for_single(self, age, gender):
         '''

@@ -35,7 +35,7 @@ def main(video_src=2):
     target_face_index = None
     target_face_id_in_db = None
     
-    social_relation_estimator = SocialRelationEstimator(robot_ip, update_flag=False)
+    social_relation_estimator = SocialRelationEstimator(robot_control, update_flag=False)
 
     while True:
         s_time = time.time()

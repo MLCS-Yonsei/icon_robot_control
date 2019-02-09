@@ -101,6 +101,10 @@ class RobotControl:
                     'robot_hor_movement_time' : None,
                     'robot_ver_movement_time' : None
                 }
+    def send(self, msg):
+        if self.client_socket is not None:
+            # print("Message sent to the robot.")
+            self.client_socket.send(msg.encode())
 
     def run(self, 
             _var, 
@@ -321,7 +325,7 @@ class RobotControl:
             _m = "".join(['STX',hor_direction,robot_speed,hor_direction,hor_speed,ver_direction,ver_speed,robot_face,'ETX'])
             # _m = "".join(['STX',hor_direction,robot_speed,hor_direction,'000',ver_direction,ver_speed,robot_face,'ETX'])
 
-            print('좌우방향',hor_direction,'좌우스피드',robot_speed,'고개좌우방향',hor_direction,'고개좌우스피드',hor_speed,'고개상하방향',ver_direction,'고개상하스피드',ver_speed,'로보얼굴',robot_face)
+            # print('좌우방향',hor_direction,'좌우스피드',robot_speed,'고개좌우방향',hor_direction,'고개좌우스피드',hor_speed,'고개상하방향',ver_direction,'고개상하스피드',ver_speed,'로보얼굴',robot_face)
         elif move_flag == 1:
             hor_direction = _var['hor_direction']
             ver_direction = _var['ver_direction']
@@ -346,9 +350,8 @@ class RobotControl:
         # print(hor_direction, ver_direction)
         # print(_m, hor_direction, ver_direction)
         
-        if self.client_socket is not None:
             # print("Sent")
-            self.client_socket.send(_m.encode())
+        self.send(_m)
 
         # '''
         # 음성 재생
