@@ -29,7 +29,9 @@ class SocialRelationEstimator:
         self.status = 0
         self.couple_not_cnt = None
         self.wait_time = None
-        self.wait_secs = 5 # 대기할 시간
+        self.wait_secs = None # 대기할 시간
+
+        self.min_detect_cnt = 8
 
         '''
         0 : 발화 전 
@@ -108,11 +110,20 @@ class SocialRelationEstimator:
     def _check_status(self):
         result = False
         if self.request_thread is not None and not self.request_thread.isAlive():
-            # 발화 종료됨. n초만큼 대기 후 status 2로 변경
-            self.status = 2
+            # 발화 종료됨. n초만큼 대기 후(status 4) status 2로 변경
+            self.status = 4
             self.request_thread = None
 
-            result = True
+            self.wait_time = time.time()
+            self.wait_secs = random.uniform(1.8, 4.9) # 대기할 시간
+        
+        if self.status == 4:
+            if time.time() - self.wait_time > self.wait_secs:
+                self.status = 2
+                self.wait_time = None
+                self.wait_secs = None
+
+                result = True
 
         if self.status < 2:
             result = True
@@ -148,11 +159,12 @@ class SocialRelationEstimator:
     def _random_movement(self):
         while True:
             done = self.random_utterance.run()
-            print(done)
+            # print(done)
             if done == True:
                 break
             else:
                 _msg = self.random_utterance.msg()
+                print(_msg)
                 self.robot_control.send(_msg)
 
     def utterance_for_family(self, ages, genders):
@@ -208,7 +220,7 @@ class SocialRelationEstimator:
         self._check_consistency(target_face_id)
 
         print(detect_cnts, ages, genders, emotions, emotion_probs)
-        if min(detect_cnts) > 5:
+        if min(detect_cnts) > self.min_detect_cnt:
             if len(ages) == 1:
                 self.utterance_for_single(ages[0], genders[0])
             elif len(ages) == 2:
