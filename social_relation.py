@@ -139,8 +139,11 @@ class SocialRelationEstimator:
             self.status = 1
         else:
             target_files = glob.glob(os.path.join('audio',relation+str(self.stage)+'*'))
-            # target_file_path = self._get_path(random.choice(target_files))
-            self._send_play_request(random.choice(target_files))
+            if len(target_files) > 0:
+                # target_file_path = self._get_path(random.choice(target_files))
+                self._send_play_request(random.choice(target_files))
+            else:
+                print("No audio files.")
 
     def _random_movement(self):
         while True:
