@@ -170,7 +170,7 @@ class FaceTracker:
         _target_face_location = self.face_locations[index]
         _target_face_area = self._get_box_area(_target_face_location)
         _target_face_width = _target_face_location[1] - _target_face_location[3]
-        print("Target face area", _target_face_area)
+        # print("Target face area", _target_face_area)
         for i, b in enumerate(self.face_locations):
             _a = self._get_box_area(box_location=b)
             _d = self._get_box_distance(b1=_target_face_location, b2=b)
@@ -184,11 +184,15 @@ class FaceTracker:
         f1 = self.face_locations[indexes[0]]
         f2 = self.face_locations[indexes[1]]
         
-        ns = [f1[0], f2[0]]
-        es = [f1[1], f2[1]]
+        
+        ns = [f1[0], f2[0]] 
+        es = [f1[3], f2[1]] # 81 128 -> 
         ss = [f1[2], f2[2]]
-        ws = [f1[3], f2[3]]
+        ws = [f1[1], f2[3]] # 54 102
+        print(f1, f2, (min(ns), min(es), max(ss), max(ws)))
+        # 49 81 76 54.  49 128 76 102
 
+        # 54 81 102 128
         return (min(ns), min(es), max(ss), max(ws))
 
     def run(self, frame, draw_on_img=True):

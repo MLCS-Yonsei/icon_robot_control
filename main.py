@@ -160,7 +160,7 @@ def main(video_src=2):
                                         target_name, 
                                         target_face_location, 
                                         frame,
-                                        move_flag)
+                                        move_flag, social_relation_estimator)
                 else:
                     # The actual robot part
                     _var = robot_control.run(_var, 
@@ -168,7 +168,7 @@ def main(video_src=2):
                                         target_name, 
                                         None, 
                                         frame,
-                                        move_flag)
+                                        move_flag, social_relation_estimator)
 
                 # 관계 추정 부분 
                 # print(robot_control.status)
@@ -210,7 +210,7 @@ def main(video_src=2):
                                         None, 
                                         None, 
                                         frame,
-                                        2)
+                                        2, social_relation_estimator)
 
             # delta = time.time() - s_time
             # print("Time Elapsed:", delta)

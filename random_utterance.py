@@ -1,9 +1,11 @@
 import time
 import random
-import glob
+import glob, os
+import threading
+import requests
 
 class RandomUtterance:
-    def __init__(self, robot_control, robot_listen_queue):   
+    def __init__(self, robot_ip, robot_socket, robot_listen_queue):   
         '''
         Random Utterance 상황 flag
         0 : 초기 상태
@@ -13,8 +15,9 @@ class RandomUtterance:
         Flow : 0 -> 1 -> 2 (1 or 2회) -> (Face detect 여부 확인 후) 0 반복
         '''
         self.reset()
-        self.robot_ip = robot_control.robot_ip
-        if robot_control.client_socket is None:
+        self.enable_speaker = True
+        self.robot_ip = robot_ip
+        if robot_socket is None:
             self.robot_listen_q = None
         else:
             self.robot_listen_q = robot_listen_queue

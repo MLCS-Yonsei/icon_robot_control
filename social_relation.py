@@ -31,7 +31,11 @@ class SocialRelationEstimator:
         self.wait_time = None
         self.wait_secs = None # 대기할 시간
 
+        self.reset_emo_vars()
+
         self.min_detect_cnt = 8
+
+        self.msg = ""
 
         '''
         0 : 발화 전 
@@ -48,6 +52,10 @@ class SocialRelationEstimator:
         self.current_relation = None
         self.target_face_id = None
         self.last_target_face_id = None
+        self.tracked_ids = []
+
+        self.robot_control = robot_control
+        self.robot_ip = robot_control.robot_ip
 
         if not os.path.exists('audio'):
             os.makedirs('audio')
@@ -56,13 +64,19 @@ class SocialRelationEstimator:
         if update_flag == True:
             self._download_audio_files()
 
-        self.robot_control = robot_control
-        self.robot_ip = robot_control.robot_ip
         self.request_thread = None
 
         self.enable_speaker = enable_speaker
 
-        self.random_utterance = RandomUtterance(None, None)
+        self.random_utterance = RandomUtterance(None, None, None)
+
+    def reset_emo_vars(self):
+        self.emotion_flag = 0
+        self.emo_time = None
+        self.emo_wait_secs = 5.5
+        self.emo_wait_cnt = 0
+        self.emo_wait_limit = 2
+        self.happiness_cnt = 0
 
     def _download_audio_files(self):
         if not os.path.exists('audio'):
@@ -77,10 +91,12 @@ class SocialRelationEstimator:
         print("Download completed")
         zipfile = ZipFile(BytesIO(resp.read()))
         for name in zipfile.namelist():
+            print(name)
             _audio = zipfile.read(name)
             _path = os.path.join('audio', name)
-            with open(_path, 'wb') as f:
-                f.write(_audio)
+            if name[0] != '_':
+                with open(_path, 'wb') as f:
+                    f.write(_audio)
         print("All files are saved.")
 
         # 로봇에 업데이트 신호 보내기
@@ -116,15 +132,106 @@ class SocialRelationEstimator:
             # 발화 시작, 종료 후 4로 전환하고 n초만큼 대기. 
             self.status = 3
 
+    def emotion_routine_check(self):
+        if self.stage == 2 and self.emotion_flag == 0:
+            print("Emo routine starts")
+            # 감정 인식 시작 
+            bypass_signal = False
+            if len(self.emotions) == 1:
+                if self.emotions[0] == "happiness" and self.emotion_probs[0] > 0.8:
+                    bypass_signal = True
+            else:
+                if "happiness" in self.emotions and max(self.emotion_probs) > 0.8:
+                    bypass_signal = True
+
+            if bypass_signal == True:
+                print("Happiness Detected!")
+                target_files = glob.glob(os.path.join('audio','EMO4'+'*'))
+                if len(target_files) > 0:
+                    # target_file_path = self._get_path(random.choice(target_files))
+                    self._send_play_request(random.choice(target_files))
+
+                self.reset_emo_vars()
+                self.emotion_flag = 2
+            else:
+                self.emotion_flag = 1
+                target_files = glob.glob(os.path.join('audio','EMO1'+'*'))
+                if len(target_files) > 0:
+                    # target_file_path = self._get_path(random.choice(target_files))
+                    self._send_play_request(random.choice(target_files))
+
+                self.emo_wait_cnt += 1
+                self.emo_time = time.time()
+        elif self.stage == 2 and self.emotion_flag == 1:
+            # 감정 확인중 
+            print("Emo time", time.time() - self.emo_time, self.emotions)
+            if len(self.emotions) == 1:
+                if self.emotions[0] == "happiness" and self.emotion_probs[0] > 0.8:
+                    self.happiness_cnt += 1
+                    if self.happiness_cnt > 0:
+                        print("Happiness Detected!")
+                        target_files = glob.glob(os.path.join('audio','EMO2'+'*'))
+                        if len(target_files) > 0:
+                            # target_file_path = self._get_path(random.choice(target_files))
+                            self._send_play_request(random.choice(target_files))
+
+                        self.reset_emo_vars()
+                        self.emotion_flag = 2
+                        # sgl_utt(gender)
+            else:
+                if "happiness" in self.emotions and max(self.emotion_probs) > 0.8:
+                    self.happiness_cnt += 1
+                    if self.happiness_cnt > 0:
+                        print("Happiness Detected!")
+                        target_files = glob.glob(os.path.join('audio','EMO2'+'*'))
+                        if len(target_files) > 0:
+                            # target_file_path = self._get_path(random.choice(target_files))
+                            self._send_play_request(random.choice(target_files))
+
+                        self.reset_emo_vars()
+                        self.emotion_flag = 2
+                        # sgl_utt(gender)
+            if self.emo_time is not None:
+                if time.time() - self.emo_time > self.emo_wait_secs and self.emo_wait_cnt < 2:
+                    print("Still not happy")
+                    # Todo 190209
+                    # 거절 시 멘트로. (완)
+                    target_files = glob.glob(os.path.join('audio','EMO3'+'*'))
+                    if len(target_files) > 0:
+                        # target_file_path = self._get_path(random.choice(target_files))
+                        self._send_play_request(random.choice(target_files))
+
+                    self.emo_wait_cnt += 1
+                    self.emo_time = time.time()
+                elif time.time() - self.emo_time > self.emo_wait_secs and self.emo_wait_cnt == 2:
+                    print("Giving up Emo routine")
+                    target_files = glob.glob(os.path.join('audio','EMO6'+'*'))
+                    if len(target_files) > 0:
+                        # target_file_path = self._get_path(random.choice(target_files))
+                        self._send_play_request(random.choice(target_files))
+
+                    self.reset_emo_vars()
+                    self.emotion_flag = 3
+                    # sgl_utt(gender)
+
+        else:
+            return False
+
+        return True
+
     def _check_status(self):
         result = False
         if self.request_thread is not None and not self.request_thread.isAlive():
             # 발화 종료됨. n초만큼 대기 후(status 4) status 2로 변경
+            print("발화 종료")
             self.status = 4
             self.request_thread = None
 
             self.wait_time = time.time()
-            self.wait_secs = random.uniform(1.8, 4.9) # 대기할 시간
+            self.wait_secs = random.uniform(0.8, 1.2) # 대기할 시간
+        else:
+            if self.emotion_flag == 1 and self.status != 3:
+                result = True
         
         if self.status == 4:
             if time.time() - self.wait_time > self.wait_secs:
@@ -134,48 +241,66 @@ class SocialRelationEstimator:
 
                 result = True
 
-        if self.status < 2:
+        if self.status <= 2:
             result = True
 
-        print("current status", self.status, "current stage", self.stage, "Thread", self.request_thread, "Result", result)
+        if result == True:
+            emotion_signal = self.emotion_routine_check()
+            if emotion_signal == False:
+                result = True
+            else:
+                result = False
+
+        print(self.msg, "current status", self.status, "current stage", self.stage, "Thread", self.request_thread, "Result", result)
         return result
 
     def _select_audio(self, relation):
-        print("Relation Check", self.current_relation, relation, self.current_relation == relation)
-        if self.last_target_face_id == self.target_face_id and self.stage == 0:
+        print("Relation Check", self.current_relation, relation, self.current_relation == relation, "stage", self.stage)
+        if self.target_face_id in self.tracked_ids and self.stage == 0:
+            print(123)
             # 마지막에 왔던 사람이 또 옴
+            # 마지막 말고 역대로 추적했던 ID값을 다 가지고 있기 Todo
             if self.current_relation == relation:
-                print("또와버렸네.")
-        else:
-            self.last_target_face_id = self.target_face_id
-
-        if self.current_relation == relation:
-            self.stage += 1
+                target_files = glob.glob(os.path.join('audio','REP'+'*'))
+                self._send_play_request(random.choice(target_files))
+                
+                self.stage = 1
             
         else:
-            self.stage = 1
-            self.current_relation = relation
-        
-        if self.stage > 3:
-            self.stage = 4
 
-            self.target_face_id = None
-            print("All stage cleared. Random routine starts.")
-            self._random_movement()
+            if not self.target_face_id in self.tracked_ids:
+                self.last_target_face_id = self.target_face_id
+                self.tracked_ids.append(self.target_face_id)
 
-            self.stage = 0
-            self.status = 1
-        else:
-            if self.stage == 1:
-                # 인사말  
-                target_files = glob.glob(os.path.join('audio','GRT'+'*'))
+            if self.current_relation == relation:
+                self.stage += 1
+                
             else:
-                target_files = glob.glob(os.path.join('audio',relation+str(self.stage)+'*'))
-            if len(target_files) > 0:
-                # target_file_path = self._get_path(random.choice(target_files))
-                self._send_play_request(random.choice(target_files))
+                self.stage = 1
+                self.current_relation = relation
+            
+            if self.stage > 4:
+                self.stage = 5
+
+                self.target_face_id = None
+                print("All stage cleared. Random routine starts.")
+                self._random_movement()
+
+                self.stage = 0
+                self.status = 1
             else:
-                print("No audio files.")
+                if self.stage == 1:
+                    # 인사말  
+                    target_files = glob.glob(os.path.join('audio','GRT'+'*'))
+                elif self.stage == 4:
+                    target_files = glob.glob(os.path.join('audio','BYE'+'*'))
+                else:
+                    target_files = glob.glob(os.path.join('audio',relation+str(self.stage)+'*'))
+                if len(target_files) > 0:
+                    # target_file_path = self._get_path(random.choice(target_files))
+                    self._send_play_request(random.choice(target_files))
+                else:
+                    print("No audio files.")
 
     def _random_movement(self):
         while True:
@@ -236,25 +361,32 @@ class SocialRelationEstimator:
             print("utterance_for_kids", ages, genders, self.stage)
             self._select_audio('KID')
 
-    def utterance_for_single(self, age, gender):
+    def utterance_for_single(self, age, gender, emotion, emo_prob):
         '''
         SGL1xx.wav
         '''
+
         if self._check_status() and self.couple_not_cnt is None:
-            print("utterance_for_single", age, gender, self.stage)
+            print("utterance_for_single", age, gender, self.stage, self.emotion_flag)
             
-            if age == "M":
+            # if not self.emotion_routine_check():
+            # 감정 루프에서 나감
+            if gender == "M":
                 self._select_audio('SGM')
             else:
                 self._select_audio('SGF')
-
+            self.emotion_flag = 0
+    
     def run(self, detect_cnts, ages, genders, emotions, emotion_probs, target_face_id):
         self._check_consistency(target_face_id)
+
+        self.emotions = emotions
+        self.emotion_probs = emotion_probs
 
         print(detect_cnts, ages, genders, emotions, emotion_probs)
         if min(detect_cnts) > self.min_detect_cnt:
             if len(ages) == 1:
-                self.utterance_for_single(ages[0], genders[0])
+                self.utterance_for_single(ages[0], genders[0], emotions[0], emotion_probs[0])
             elif len(ages) == 2:
                 if genders[0] == genders[1]:
                     if self._get_diff(ages) <= 8:

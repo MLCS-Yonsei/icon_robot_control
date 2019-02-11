@@ -7,6 +7,7 @@ import queue
 from src.color_extractor.color_extractor import ImageToColor
 import numpy as np
 import os 
+import time 
 
 from random_utterance import RandomUtterance
 
@@ -30,7 +31,7 @@ class RobotControl:
         self.client_socket = client_socket
         self.robot_listen_q = queue.Queue()
 
-        self.random_utterance = RandomUtterance(self, self.robot_listen_q)
+        self.random_utterance = RandomUtterance(robot_ip, client_socket, self.robot_listen_q)
 
         '''
         Robot Status
@@ -39,6 +40,7 @@ class RobotControl:
         '''
         self.status = 1
 
+        self.face_time = None
         if client_socket is not None:
             def listen(sock, q):
                 while True:
@@ -116,9 +118,22 @@ class RobotControl:
             target_face_name, 
             target_face_location, 
             frame,
-            move_flag):
+            move_flag,
+            social_relation_estimator):
 
         self.status = 1
+        _m = None
+        '''
+        1 화남
+        2 정색
+        3 무서움
+        4 웃음
+        5 놀람
+        6 울음
+        '''
+        if self.face_time is None or time.time() - self.face_time > 6:
+            self.robot_face = random.choice(['01', '02', '03', '04', '05', '06'])
+            self.face_time = time.time()
 
         _s = 0
         _speed_acc_ratio = 10 # 목표 속도의 현재속도의 1/10 비율로 변화
@@ -154,12 +169,12 @@ class RobotControl:
             polly_msg = None
 
             if previous_hor_movement_time is not None:
-                hor_delta_t = time() - previous_hor_movement_time
+                hor_delta_t = time.time() - previous_hor_movement_time
             else:
                 hor_delta_t = None
 
             if previous_ver_movement_time is not None:
-                ver_delta_t = time() - previous_ver_movement_time
+                ver_delta_t = time.time() - previous_ver_movement_time
             else:
                 ver_delta_t = None
 
@@ -242,7 +257,7 @@ class RobotControl:
             _vertical_distance_ratio = _vertical_distance / _c_ver
 
             # 가운데에서 떨어진 정도
-            if _horizontal_distance_ratio < 0.3:
+            if _horizontal_distance_ratio < 0.5:
                 hor_direction = '11'
 
                 hor_movement_time = None
@@ -315,10 +330,10 @@ class RobotControl:
 
             # print(_horizontal_distance, hor_direction ,robot_speed)
             if hor_direction != '11':
-                hor_movement_time = time()
+                hor_movement_time = time.time()
 
             if ver_direction != '11':
-                ver_movement_time = time()
+                ver_movement_time = time.time()
 
             _var['hor_direction'] = hor_direction
             _var['ver_direction'] = ver_direction
@@ -346,16 +361,19 @@ class RobotControl:
             # _m = "".join(['STX',hor_direction,robot_speed,hor_direction,'000',ver_direction,ver_speed,robot_face,'ETX'])
 
         elif move_flag == 2:
+            # if social_relation_estimator.status < 2:
+            # print("random utt,", social_relation_estimator.status)
             self.random_utterance.run()
             _m = self.random_utterance.msg()
-            
+        
         # print(_m)
         # _m = str(len(_m)).zfill(4) + _m
         # print(hor_direction, ver_direction)
         # print(_m, hor_direction, ver_direction)
         
             # print("Sent")
-        self.send(_m)
+        if _m is not None:
+            self.send(_m)
 
         # '''
         # 음성 재생
