@@ -342,13 +342,18 @@ class FaceTracker:
                 bottom *= 4
                 left *= 4
 
+                _id = int(name.split("ID:")[1].split(",")[0])
+                if _id == 1:
+                    _color = (255, 0, 0)
+                else:
+                    _color = (0, 0, 255)
                 # Draw a box around the face
-                cv2.rectangle(frame, (left, top), (right, bottom), (0, 0, 255), 2)
+                cv2.rectangle(frame, (left, top), (right, bottom), _color, 3)
 
                 # Draw a label with a name below the face
-                cv2.rectangle(frame, (left, bottom - 35), (right, bottom), (0, 0, 255), cv2.FILLED)
+                cv2.rectangle(frame, (left, bottom - 35), (right + 210, bottom), _color, cv2.FILLED)
                 font = cv2.FONT_HERSHEY_DUPLEX
-                cv2.putText(frame, name, (left + 6, bottom - 6), font, 1.0, (80, 80, 80), 1)
+                cv2.putText(frame, name, (left + 6, bottom - 6), font, 1.0, (255, 255, 255), 1)
 
         if self.video_capture is not None:
             # Display the resulting image
