@@ -8,6 +8,8 @@ from src.emotion import EmotionNet
 import time
 import math
 
+from known_face import *  # KnownFaces Name Group
+
 # This is a demo of running face recognition on live video from your webcam. It's a little more complicated than the
 # other example, but it includes some basic performance tweaks to make things run a lot faster:
 #   1. Process each video frame at 1/4 resolution (though still display it at full resolution)
@@ -30,7 +32,7 @@ class FaceTracker:
         else: 
             self.video_capture = None
 
-        self.mot_tracker = Sort() 
+        self.mot_tracker = Sort()
 
         # Initialize some variables
         '''
@@ -39,25 +41,26 @@ class FaceTracker:
         Todo 190205
         Face group에 들어갈 encoding에 대한 threshold 지정해야할듯.
         '''
-        self.known_face_encodings = []
-        self.known_face_groups = [] #[{'title':"Test",'member':["1"],'encodings':[]}]
-        self.known_face_names = []
-        self.known_face_times = []
-        self.known_face_ids = []
-        self.known_face_ages = []
-        self.known_face_genders = []
-        self.known_face_emotions = []
-        self.known_face_emotion_probs = []
-        self.known_face_detect_count = []
+        # self.known_face_encodings = []
+        # self.known_face_groups = [] #[{'title':"Test",'member':["1"],'encodings':[]}]
+        # self.known_face_names = []
+        # self.known_face_times = []
+        # self.known_face_ids = []
+        # self.known_face_ages = []
+        # self.known_face_genders = []
+        # self.known_face_emotions = []
+        # self.known_face_emotion_probs = []
+        # self.known_face_detect_count = []
+
+        self.known_faces = KnownFaces(data_remove_time)
 
         self.face_locations = []
         self.face_encodings = []
         self.face_names = []
         self.process_this_frame = True
 
-        self.index_in_known_data = []
 
-        self.data_remove_time = data_remove_time
+        # self.data_remove_time = data_remove_time
 
         self.center_location = None
         
@@ -78,16 +81,16 @@ class FaceTracker:
 
         return list(self.mot_tracker.update(np.asarray(_fl)))
 
-    def _remove_old_trackers(self):
-        new_known_face_times = self.known_face_times
-        current_time = time.time()
-        for i, t in enumerate(self.known_face_times):
-            if current_time - t > self.data_remove_time:
-                del self.known_face_encodings[i]
-                del self.known_face_names[i]
-                del new_known_face_times[i]
-
-        self.known_face_times = new_known_face_times
+    # def _remove_old_trackers(self):
+    #     new_known_face_times = self.known_face_times
+    #     current_time = time.time()
+    #     for i, t in enumerate(self.known_face_times):
+    #         if current_time - t > self.data_remove_time:
+    #             del self.known_face_encodings[i]
+    #             del self.known_face_names[i]
+    #             del new_known_face_times[i]
+    #
+    #     self.known_face_times = new_known_face_times
 
     def _crop_face(self, imgarray, section, margin=20, size=64):
         """
@@ -196,9 +199,10 @@ class FaceTracker:
         return (min(ns), min(es), max(ss), max(ws))
 
     def run(self, frame, draw_on_img=True):
-        self.index_in_known_data = []
+        self.known_faces.index_in_data = []
         # Resize frame of video to 1/4 size for faster face recognition processing
         small_frame = cv2.resize(frame, (0, 0), fx=0.25, fy=0.25)
+
 
         # Convert the image from BGR color (which OpenCV uses) to RGB color (which face_recognition uses)
         rgb_small_frame = small_frame[:, :, ::-1]
@@ -210,14 +214,14 @@ class FaceTracker:
             # number_of_times_to_upsample가 높을수록 멀리 있는 얼굴 detect. 속도 느려짐
             # 경험상 3일때 2m~3m
             
-            self.face_locations = face_recognition.face_locations(rgb_small_frame, number_of_times_to_upsample=3)
+            self.face_locations = face_recognition.face_locations(rgb_small_frame, number_of_times_to_upsample=1)
             self.face_locations.sort(key=lambda x: x[3])
             
             # Get face images to get age and gender info
             if self.enable_age_gender:
                 face_imgs = self._get_face_imgs(rgb_small_frame, self.face_locations)
                 if len(face_imgs) > 0:
-                    face_imgs_emotion = self._get_face_imgs(rgb_small_frame, self.face_locations, margin=0, face_size=48)
+                    face_imgs_emotion = self._get_face_imgs(rgb_small_frame, self.face_locations, margin=0, face_size=48) # 왜 두개랬지?
                     predicted_emotions, predicted_emotion_probs = self.emotion_model.predict(face_imgs_emotion)
                     predicted_genders, predicted_ages = self.age_gender_model.predict(face_imgs)
                     
@@ -230,76 +234,96 @@ class FaceTracker:
             tracker = self._track(self.face_locations)
             tracker.sort(key=lambda x: x[0])
 
+            # for face_index, face_encoding in enumerate(self.face_encodings):
             for face_index, face_encoding in enumerate(self.face_encodings):
                 # See if the face is a match for the known face(s)
-                matches = face_recognition.compare_faces(self.known_face_encodings, face_encoding, tolerance=0.4)
-                name = "Unknown"
+                matches = face_recognition.compare_faces(self.known_faces.encodings, face_encoding, tolerance=0.4)
+                # name = "Unknown"
+                name = Name("Unknown")
 
-                # If a match was found in known_face_encodings, just use the first one.
+                # If a match was found in known_face_encodings, just use the first one. ???
                 if True in matches:
                     first_match_index = matches.index(True)
-                    self.index_in_known_data.append(first_match_index)
+                    self.known_faces.index_in_data.append(first_match_index)
                     if self.enable_age_gender:
-                        track_id = self.known_face_names[first_match_index].split("ID:")[1].split(",")[0]
+                        # track_id = self.known_face_names[first_match_index].split("ID:")[1].split(",")[0]
+                        track_id = self.known_faces.names[first_match_index].track_id
+
                         gender = "M" if predicted_genders[face_index][0] > 0.5 else "F"
                         emotion = predicted_emotions[face_index]
                         emotion_prob = predicted_emotion_probs[face_index]
                         if self.age_type == "min":
-                            prev_age = int(self.known_face_names[first_match_index].split("A:")[1].split(',')[0])
+                            prev_age = self.known_faces.names[first_match_index].age
                             age = int(predicted_ages[face_index] if prev_age > int(predicted_ages[face_index]) else prev_age)
 
                         elif self.age_type == "real":
                             age = int(predicted_ages[face_index])
 
                         elif self.age_type == "mean":
-                            prev_age = int(self.known_face_names[first_match_index].split("A:")[1].split(',')[0])
-                            age = round((prev_age * self.known_face_detect_count[first_match_index] + int(predicted_ages[face_index])) / (self.known_face_detect_count[first_match_index]+1))
+                            prev_age = self.known_faces.ages[first_match_index].age
+                            detect_count = self.known_faces.detect_count[first_match_index]
+                            age = round((prev_age * detect_count + int(predicted_ages[face_index])) / (detect_count+1))
 
-                        elif self.age_type == "mean_new":
-                            prev_age = int(self.known_face_names[first_match_index].split("A:")[1].split(',')[0])
-                            age = round((prev_age * self.known_face_detect_count[first_match_index] + int(predicted_ages[face_index])) / (self.known_face_detect_count[first_match_index]+1))
-                        
-                        name = "ID:{}, G:{}, A:{}, E: {}".format(track_id, gender, age, emotion)
-                        
-                        self.known_face_genders[first_match_index] = gender
-                        self.known_face_ages[first_match_index] = age
-                        self.known_face_emotions[first_match_index] = emotion
-                        self.known_face_emotion_probs[first_match_index] = emotion_prob
+                        # elif self.age_type == "mean_new":
+                        #     prev_age = self.known_faces.ages[first_match_index].age
+                        #     detect_count = self.known_faces.detect_count[first_match_index]
+                        #     age = round((prev_age * detect_count + int(predicted_ages[face_index])) / (detect_count+1)) # same
+
+
+                        # name = "ID:{}, G:{}, A:{}, E: {}".format(track_id, gender, age, emotion)
+                        # self.known_face_genders[first_match_index] = gender
+                        # self.known_face_ages[first_match_index] = age
+                        # self.known_face_emotions[first_match_index] = emotion
+                        # self.known_face_emotion_probs[first_match_index] = emotion_prob
+
+                        name = Name(track_id, gender, age, emotion)
+                        self.known_faces.update_name(first_match_index, name, emotion_prob)
+
                     else:
-                        track_id = self.known_face_names[first_match_index].split("ID:")[1]
-                        name = "ID:{}".format(str(track_id))
+                        # track_id = self.known_face_names[first_match_index].split("ID:")[1]
+                        # name = "ID:{}".format(str(track_id))
+                        track_id = self.known_faces.names[first_match_index].track_id
+                        name = Name(track_id)
 
-                    self.known_face_names[first_match_index] = name
-                    self.known_face_times[first_match_index] = time.time()
+                    # self.known_face_names[first_match_index] = name
+                    # self.known_face_times[first_match_index] = time.time()
+                    # self.known_face_detect_count[first_match_index] += 1
+                    self.known_faces.update_data(first_match_index, time.time(), name)
 
-                    self.known_face_detect_count[first_match_index] += 1
+
+
+
                 else:
                     '''
                     # Select largest box as a target for tracing
                     known_face_encodings = [face_encodings[select_largest_face(face_locations)]]
                     known_face_names = ["Target"]
                     '''
-                    if len(tracker) == len(self.face_locations):
-                        self.known_face_encodings.append(face_encoding)
+                    if len(tracker) == len(self.face_locations):     # 다른 경우??
+                        # self.known_face_encodings.append(face_encoding)
+                        self.known_faces.encodings.append(face_encoding)
                         track_id = str(int(tracker[face_index][4]))
+
+
+                        #고개 돌렸을 때 같은 사람으로 인식하기.. 새로 짜야함
 
                         # Search for the matching face group
                         # _group = next(group for group in self.known_face_groups if track_id in group["member"] == True)
-                        _group = list(filter(lambda group: track_id in group["member"], self.known_face_groups))
+                        _group = list(filter(lambda group: track_id in group["member"], self.known_faces.groups))
                         if len(_group) > 0:
-                            _group[0]['member'].append(track_id)
+                            _group[0]["member"].append(track_id)
                             # _group[0]['encodings'].append(face_encoding)
-                            track_id = _group[0]['title']
+                            track_id = _group[0]["title"]
 
-                            _index = next((index for (index, d) in enumerate(self.known_face_groups) if d["title"] == _group[0]['title']), None)
-                            self.known_face_groups[_index] = _group[0]
+                            _index = next((index for (index, d) in enumerate(self.known_faces.groups) if d["title"] == _group[0]['title']), None)
+                            self.known_faces.groups[_index] = _group[0]
                         else:
                             _group = {
                                 'title': track_id,
                                 'member': [track_id],
                                 # 'encodings': [face_encoding]
                             }
-                            self.known_face_groups.append(_group)
+                            self.known_faces.groups.append(_group)
                         # print(123, _group, track_id)
                         if self.enable_age_gender:
                             gender = "M" if predicted_genders[face_index][0] > 0.5 else "F"
@@ -307,29 +331,40 @@ class FaceTracker:
                             emotion = predicted_emotions[face_index]
                             emotion_prob = predicted_emotion_probs[face_index]
 
-                            name = "ID:{}, G:{}, A:{}, E: {}".format(track_id, gender, age, emotion)
+                            # name = "ID:{}, G:{}, A:{}, E: {}".format(track_id, gender, age, emotion) #dict
+                            name = Name(track_id, gender, age, emotion)
                             
-                            self.known_face_genders.append(gender)
-                            self.known_face_ages.append(age)
-                            self.known_face_emotions.append(emotion)
-                            self.known_face_emotion_probs.append(emotion_prob)
-                            
-                        else:
-                            name = "ID:{}".format(track_id)
+                            # self.known_face_genders.append(gender)
+                            # self.known_face_ages.append(age)
+                            # self.known_face_emotions.append(emotion)
+                            # self.known_face_emotion_probs.append(emotion_prob)
 
-                        self.known_face_times.append(time.time())
-                        self.known_face_names.append(name)
-                        self.known_face_ids.append(track_id)
-                        self.known_face_detect_count.append(1)
-                        # name = track_id
-                        self.index_in_known_data.append(len(self.known_face_names)-1)
-                    pass
+                            self.known_faces.add_name(name, emotion_prob)
+
+
+                        else:
+                            # name = "ID:{}".format(track_id)
+                            name = Name(track_id)
+
+                        # self.known_face_times.append(time.time())
+                        # self.known_face_names.append(name)
+                        # self.known_face_ids.append(track_id)
+                        # self.known_face_detect_count.append(1)
+                        # self.known_faces.index_in_known_data.append(len(self.known_face_names)-1)
+                        self.known_faces.add_data(time.time(), name, track_id)
+
+
+
+
+
+                    pass  # ??
 
                 self.face_names.append(name)
                 # print(known_face_names)
 
             # remove old data
-            self._remove_old_trackers()
+            # self._remove_old_trackers()
+            self.known_faces.remove_olds(time.time())
 
         # self.process_this_frame = not self.process_this_frame
 
@@ -342,7 +377,11 @@ class FaceTracker:
                 bottom *= 4
                 left *= 4
 
-                _id = int(name.split("ID:")[1].split(",")[0])
+                try:
+                    _id = name.track_id
+                except:
+                    _id = 0
+                    print("out of range!")
                 if _id == 1:
                     _color = (255, 0, 0)
                 else:
@@ -353,7 +392,7 @@ class FaceTracker:
                 # Draw a label with a name below the face
                 cv2.rectangle(frame, (left, bottom - 35), (right + 210, bottom), _color, cv2.FILLED)
                 font = cv2.FONT_HERSHEY_DUPLEX
-                cv2.putText(frame, name, (left + 6, bottom - 6), font, 1.0, (255, 255, 255), 1)
+                cv2.putText(frame, name.to_text(), (left + 6, bottom - 6), font, 1.0, (255, 255, 255), 1)
 
         if self.video_capture is not None:
             # Display the resulting image
