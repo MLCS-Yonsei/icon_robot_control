@@ -310,17 +310,18 @@ class FaceTracker:
                         # Search for the matching face group
                         # _group = next(group for group in self.known_face_groups if track_id in group["member"] == True)
                         _group = list(filter(lambda group: track_id in group["member"], self.known_faces.groups))
+                        print("_group: ", _group)
                         if len(_group) > 0:
                             _group[0]["member"].append(track_id)
                             # _group[0]['encodings'].append(face_encoding)
                             track_id = _group[0]["title"]
 
-                            _index = next((index for (index, d) in enumerate(self.known_faces.groups) if d["title"] == _group[0]['title']), None)
+                            _index = next((index for (index, d) in enumerate(self.known_faces.groups) if d["title"] == _group[0]["title"]), None)
                             self.known_faces.groups[_index] = _group[0]
                         else:
                             _group = {
-                                'title': track_id,
-                                'member': [track_id],
+                                "title": track_id,
+                                "member": [track_id],
                                 # 'encodings': [face_encoding]
                             }
                             self.known_faces.groups.append(_group)
