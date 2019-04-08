@@ -41,18 +41,9 @@ class FaceTracker:
         Todo 190205
         Face group에 들어갈 encoding에 대한 threshold 지정해야할듯.
         '''
-        # self.known_face_encodings = []
-        # self.known_face_groups = [] #[{'title':"Test",'member':["1"],'encodings':[]}]
-        # self.known_face_names = []
-        # self.known_face_times = []
-        # self.known_face_ids = []
-        # self.known_face_ages = []
-        # self.known_face_genders = []
-        # self.known_face_emotions = []
-        # self.known_face_emotion_probs = []
-        # self.known_face_detect_count = []
 
         self.known_faces = KnownFaces(data_remove_time)
+        self.scale = 0.25
 
         self.face_locations = []
         self.face_encodings = []
@@ -81,16 +72,6 @@ class FaceTracker:
 
         return list(self.mot_tracker.update(np.asarray(_fl)))
 
-    # def _remove_old_trackers(self):
-    #     new_known_face_times = self.known_face_times
-    #     current_time = time.time()
-    #     for i, t in enumerate(self.known_face_times):
-    #         if current_time - t > self.data_remove_time:
-    #             del self.known_face_encodings[i]
-    #             del self.known_face_names[i]
-    #             del new_known_face_times[i]
-    #
-    #     self.known_face_times = new_known_face_times
 
     def _crop_face(self, imgarray, section, margin=20, size=64):
         """
@@ -201,7 +182,7 @@ class FaceTracker:
     def run(self, frame, draw_on_img=True):
         self.known_faces.index_in_data = []
         # Resize frame of video to 1/4 size for faster face recognition processing
-        small_frame = cv2.resize(frame, (0, 0), fx=0.25, fy=0.25)
+        small_frame = cv2.resize(frame, (0, 0), fx=self.scale, fy=self.scale)
 
 
         # Convert the image from BGR color (which OpenCV uses) to RGB color (which face_recognition uses)
@@ -234,6 +215,8 @@ class FaceTracker:
             tracker = self._track(self.face_locations)
             tracker.sort(key=lambda x: x[0])
 
+            print("123123123123123123123")
+            print(self.known_faces.groups)
             # for face_index, face_encoding in enumerate(self.face_encodings):
             for face_index, face_encoding in enumerate(self.face_encodings):
                 # See if the face is a match for the known face(s)
@@ -243,6 +226,7 @@ class FaceTracker:
 
                 # If a match was found in known_face_encodings, just use the first one. ???
                 if True in matches:
+
                     first_match_index = matches.index(True)
                     self.known_faces.index_in_data.append(first_match_index)
                     if self.enable_age_gender:
@@ -264,34 +248,16 @@ class FaceTracker:
                             detect_count = self.known_faces.detect_count[first_match_index]
                             age = round((prev_age * detect_count + int(predicted_ages[face_index])) / (detect_count+1))
 
-                        # elif self.age_type == "mean_new":
-                        #     prev_age = self.known_faces.ages[first_match_index].age
-                        #     detect_count = self.known_faces.detect_count[first_match_index]
-                        #     age = round((prev_age * detect_count + int(predicted_ages[face_index])) / (detect_count+1)) # same
-
-
-                        # name = "ID:{}, G:{}, A:{}, E: {}".format(track_id, gender, age, emotion)
-                        # self.known_face_genders[first_match_index] = gender
-                        # self.known_face_ages[first_match_index] = age
-                        # self.known_face_emotions[first_match_index] = emotion
-                        # self.known_face_emotion_probs[first_match_index] = emotion_prob
 
                         name = Name(track_id, gender, age, emotion)
                         self.known_faces.update_name(first_match_index, name, emotion_prob)
 
                     else:
-                        # track_id = self.known_face_names[first_match_index].split("ID:")[1]
-                        # name = "ID:{}".format(str(track_id))
                         track_id = self.known_faces.names[first_match_index].track_id
                         name = Name(track_id)
 
-                    # self.known_face_names[first_match_index] = name
-                    # self.known_face_times[first_match_index] = time.time()
-                    # self.known_face_detect_count[first_match_index] += 1
                     self.known_faces.update_data(first_match_index, time.time(), name)
-
-
-
+                    print("처음아님 track_id:", track_id)
 
                 else:
                     '''
@@ -299,10 +265,13 @@ class FaceTracker:
                     known_face_encodings = [face_encodings[select_largest_face(face_locations)]]
                     known_face_names = ["Target"]
                     '''
+
+                    # print("tracker: ", len(tracker), " face_locations: ", len(self.face_locations))
                     if len(tracker) == len(self.face_locations):     # 다른 경우??
                         # self.known_face_encodings.append(face_encoding)
                         self.known_faces.encodings.append(face_encoding)
-                        track_id = str(int(tracker[face_index][4]))
+                        track_id = str(int(tracker[face_index][4]))  # track_id는 어떻게 정해지나
+                        print("처음임 track id:", track_id)
 
 
                         #고개 돌렸을 때 같은 사람으로 인식하기.. 새로 짜야함
@@ -310,8 +279,9 @@ class FaceTracker:
                         # Search for the matching face group
                         # _group = next(group for group in self.known_face_groups if track_id in group["member"] == True)
                         _group = list(filter(lambda group: track_id in group["member"], self.known_faces.groups))
-                        print("_group: ", _group)
+
                         if len(_group) > 0:
+                            print("#######################################")
                             _group[0]["member"].append(track_id)
                             # _group[0]['encodings'].append(face_encoding)
                             track_id = _group[0]["title"]
@@ -322,24 +292,18 @@ class FaceTracker:
                             _group = {
                                 "title": track_id,
                                 "member": [track_id],
-                                # 'encodings': [face_encoding]
                             }
+
                             self.known_faces.groups.append(_group)
-                        # print(123, _group, track_id)
+                        print("_group: ", _group)
                         if self.enable_age_gender:
                             gender = "M" if predicted_genders[face_index][0] > 0.5 else "F"
                             age = int(predicted_ages[face_index])
                             emotion = predicted_emotions[face_index]
                             emotion_prob = predicted_emotion_probs[face_index]
 
-                            # name = "ID:{}, G:{}, A:{}, E: {}".format(track_id, gender, age, emotion) #dict
                             name = Name(track_id, gender, age, emotion)
                             
-                            # self.known_face_genders.append(gender)
-                            # self.known_face_ages.append(age)
-                            # self.known_face_emotions.append(emotion)
-                            # self.known_face_emotion_probs.append(emotion_prob)
-
                             self.known_faces.add_name(name, emotion_prob)
 
 
@@ -347,11 +311,7 @@ class FaceTracker:
                             # name = "ID:{}".format(track_id)
                             name = Name(track_id)
 
-                        # self.known_face_times.append(time.time())
-                        # self.known_face_names.append(name)
-                        # self.known_face_ids.append(track_id)
-                        # self.known_face_detect_count.append(1)
-                        # self.known_faces.index_in_known_data.append(len(self.known_face_names)-1)
+
                         self.known_faces.add_data(time.time(), name, track_id)
 
 

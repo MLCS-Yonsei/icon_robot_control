@@ -123,7 +123,7 @@ class SocialRelationEstimator:
 
                 response = requests.request("GET", url, params=querystring)
             else:
-                print("TEST ENV. sleep for 1 secs", path)
+                # print("TEST ENV. sleep for 1 secs", path)
                 time.sleep(1)
 
         if self.request_thread is None or not self.request_thread.isAlive():
@@ -134,7 +134,7 @@ class SocialRelationEstimator:
 
     def emotion_routine_check(self):
         if self.stage == 2 and self.emotion_flag == 0:
-            print("Emo routine starts")
+            # print("Emo routine starts")
             # 감정 인식 시작 
             bypass_signal = False
             if len(self.emotions) == 1:
@@ -145,7 +145,7 @@ class SocialRelationEstimator:
                     bypass_signal = True
 
             if bypass_signal == True:
-                print("Happiness Detected!")
+                # print("Happiness Detected!")
                 target_files = glob.glob(os.path.join('audio','EMO4'+'*'))
                 if len(target_files) > 0:
                     # target_file_path = self._get_path(random.choice(target_files))
@@ -164,7 +164,7 @@ class SocialRelationEstimator:
                 self.emo_time = time.time()
         elif self.stage == 2 and self.emotion_flag == 1:
             # 감정 확인중 
-            print("Emo time", time.time() - self.emo_time, self.emotions)
+            # print("Emo time", time.time() - self.emo_time, self.emotions)
             if len(self.emotions) == 1:
                 if self.emotions[0] == "happiness" and self.emotion_probs[0] > 0.8:
                     self.happiness_cnt += 1
@@ -251,7 +251,7 @@ class SocialRelationEstimator:
             else:
                 result = False
 
-        print(self.msg, "current status", self.status, "current stage", self.stage, "Thread", self.request_thread, "Result", result)
+        # print(self.msg, "current status", self.status, "current stage", self.stage, "Thread", self.request_thread, "Result", result)
         return result
 
     def _select_audio(self, relation):
@@ -283,7 +283,7 @@ class SocialRelationEstimator:
                 self.stage = 5
 
                 self.target_face_id = None
-                print("All stage cleared. Random routine starts.")
+                # print("All stage cleared. Random routine starts.")
                 self._random_movement()
 
                 self.stage = 0
@@ -311,7 +311,7 @@ class SocialRelationEstimator:
                 break
             else:
                 _msg = self.random_utterance.msg()
-                print(_msg)
+                # print(_msg)
                 result = self.robot_control.send(_msg)
                 if result == True:
                     print("Message sent") 
@@ -383,7 +383,7 @@ class SocialRelationEstimator:
         self.emotions = emotions
         self.emotion_probs = emotion_probs
 
-        print(detect_cnts, ages, genders, emotions, emotion_probs)
+        # print(detect_cnts, ages, genders, emotions, emotion_probs)
         if min(detect_cnts) > self.min_detect_cnt:
             if len(ages) == 1:
                 self.utterance_for_single(ages[0], genders[0], emotions[0], emotion_probs[0])

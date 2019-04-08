@@ -152,7 +152,7 @@ class RandomUtterance:
 
                     response = requests.request("GET", url, params=querystring)
                 else:
-                    print("TEST ENV. sleep for 1 secs", path)
+                    # print("TEST ENV. sleep for 1 secs", path)
                     time.sleep(1)
 
             if self.request_thread is None or not self.request_thread.isAlive():
