@@ -70,6 +70,9 @@ class Name:
         self.age = age
         self.emotion = emotion
 
+    def __str__(self):
+        return "ID: {}".format(self.track_id)
+
     def to_text(self):
         return "ID:{}, G:{}, A:{}, E: {}".format(self.track_id, self.gender, self.age, self.emotion)
 

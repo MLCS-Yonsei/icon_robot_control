@@ -45,11 +45,10 @@ class FaceTracker:
         self.known_faces = KnownFaces(data_remove_time)
         self.scale = 0.25
 
-        self.face_locations = []
+        self.face_locations = []  # A list of tuples of found face locations in css (top, right, bottom, left) order
         self.face_encodings = []
         self.face_names = []
         self.process_this_frame = True
-
 
         # self.data_remove_time = data_remove_time
 
@@ -151,8 +150,10 @@ class FaceTracker:
 
     def get_relevant_faces(self, index, area_margin=20, distance_margin=5):
         _target_face_index = []
+
+
         _target_face_location = self.face_locations[index]
-        _target_face_area = self._get_box_area(_target_face_location)
+        _target_face_area = self._get_box_area(_target_face_location)  # 방향 맞나 확인
         _target_face_width = _target_face_location[1] - _target_face_location[3]
         # print("Target face area", _target_face_area)
         for i, b in enumerate(self.face_locations):
@@ -166,18 +167,19 @@ class FaceTracker:
 
     def get_center_location(self, indexes):
         f1 = self.face_locations[indexes[0]]
-        f2 = self.face_locations[indexes[1]]
+        f2 = self.face_locations[indexes[1]]  # (top, right, bottom, left)
         
-        
-        ns = [f1[0], f2[0]] 
-        es = [f1[3], f2[1]] # 81 128 -> 
-        ss = [f1[2], f2[2]]
-        ws = [f1[1], f2[3]] # 54 102
-        print(f1, f2, (min(ns), min(es), max(ss), max(ws)))
-        # 49 81 76 54.  49 128 76 102
+        vers = [f1[1], f1[3], f2[1], f2[3]]
+        hors = [f1[0], f1[2], f2[0], f2[2]]
 
-        # 54 81 102 128
-        return (min(ns), min(es), max(ss), max(ws))
+        return min(hors), max(vers), max(hors), min(vers)
+
+        # ns = [f1[0], f2[0]]
+        # es = [f1[3], f2[1]]
+        # ss = [f1[2], f2[2]]
+        # ws = [f1[1], f2[3]]
+        # print(f1, f2, (min(ns), min(es), max(ss), max(ws)))
+        # return (min(ns), min(es), max(ss), max(ws))  # 좀 이상함. 그려보기
 
     def run(self, frame, draw_on_img=True):
         self.known_faces.index_in_data = []
@@ -195,7 +197,7 @@ class FaceTracker:
             # number_of_times_to_upsample가 높을수록 멀리 있는 얼굴 detect. 속도 느려짐
             # 경험상 3일때 2m~3m
             
-            self.face_locations = face_recognition.face_locations(rgb_small_frame, number_of_times_to_upsample=1)
+            self.face_locations = face_recognition.face_locations(rgb_small_frame, number_of_times_to_upsample=3)
             self.face_locations.sort(key=lambda x: x[3])
             
             # Get face images to get age and gender info
@@ -215,8 +217,8 @@ class FaceTracker:
             tracker = self._track(self.face_locations)
             tracker.sort(key=lambda x: x[0])
 
-            print("123123123123123123123")
-            print(self.known_faces.groups)
+
+            # print(self.known_faces.groups)
             # for face_index, face_encoding in enumerate(self.face_encodings):
             for face_index, face_encoding in enumerate(self.face_encodings):
                 # See if the face is a match for the known face(s)
@@ -271,17 +273,19 @@ class FaceTracker:
                         # self.known_face_encodings.append(face_encoding)
                         self.known_faces.encodings.append(face_encoding)
                         track_id = str(int(tracker[face_index][4]))  # track_id는 어떻게 정해지나
-                        print("처음임 track id:", track_id)
+
 
 
                         #고개 돌렸을 때 같은 사람으로 인식하기.. 새로 짜야함
 
                         # Search for the matching face group
                         # _group = next(group for group in self.known_face_groups if track_id in group["member"] == True)
-                        _group = list(filter(lambda group: track_id in group["member"], self.known_faces.groups))
+
+                        _group = list(filter(lambda group: track_id in group["member"],
+                                             self.known_faces.groups))  # group 중 새로운 track_id를 포함하는 애??
 
                         if len(_group) > 0:
-                            print("#######################################")
+
                             _group[0]["member"].append(track_id)
                             # _group[0]['encodings'].append(face_encoding)
                             track_id = _group[0]["title"]
@@ -295,7 +299,6 @@ class FaceTracker:
                             }
 
                             self.known_faces.groups.append(_group)
-                        print("_group: ", _group)
                         if self.enable_age_gender:
                             gender = "M" if predicted_genders[face_index][0] > 0.5 else "F"
                             age = int(predicted_ages[face_index])
@@ -317,19 +320,21 @@ class FaceTracker:
 
 
 
+                    else:
+                        # 언제??
+                        pass
 
-                    pass  # ??
+                print(self.known_faces.groups)
 
                 self.face_names.append(name)
-                # print(known_face_names)
+                # print("face names: ", self.face_names)
 
-            # remove old data
-            # self._remove_old_trackers()
             self.known_faces.remove_olds(time.time())
 
         # self.process_this_frame = not self.process_this_frame
 
         if draw_on_img:
+
             # Display the results
             for (top, right, bottom, left), name in zip(self.face_locations, self.face_names):
                 # Scale back up face locations since the frame we detected in was scaled to 1/4 size

@@ -9,7 +9,7 @@ import os
 
 # argv: 0 0 2
 
-
+8
 def main(video_src=2):
     # Initiate Face Tracker
     # Todo 190207
@@ -180,7 +180,7 @@ def main(video_src=2):
                     # 거리가 일정 거리 이하고, Detect된 얼굴 면적 차이가 일정 크기 이하일 경우 Select
 
                     relevant_face_index = face_tracker.get_relevant_faces(target_face_index)
-                    if len(relevant_face_index) == 2:
+                    if len(relevant_face_index) >= 2:
                         face_tracker.center_location = face_tracker.get_center_location(relevant_face_index)
                         social_relation_estimator.couple_not_cnt = 0
                     elif social_relation_estimator.couple_not_cnt is not None:
