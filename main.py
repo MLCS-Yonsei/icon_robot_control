@@ -7,9 +7,9 @@ import sys
 import time
 import os
 
-# argv: 0 0 2
+# argv: 0 0 2 0
 
-8
+
 def main(video_src=2):
     # Initiate Face Tracker
     # Todo 190207
@@ -33,6 +33,10 @@ def main(video_src=2):
         client_socket.connect((robot_ip, 8250))
         print("Connected to the robot.")
 
+
+    audio_off = (sys.argv[4] == "0")
+
+
     robot_control = RobotControl(robot_ip, client_socket)
     robot_face = '05'
     target_face_index = None
@@ -42,7 +46,7 @@ def main(video_src=2):
         _update_flag = True
     else:
         _update_flag = False
-        social_relation_estimator = SocialRelationEstimator(robot_control, update_flag=_update_flag, enable_speaker=True)
+        social_relation_estimator = SocialRelationEstimator(robot_control, update_flag=_update_flag, enable_speaker=True, audio_off=audio_off)
 
     while True:
         s_time = time.time()
@@ -156,7 +160,6 @@ def main(video_src=2):
                     # The actual robot part
                     # print(target_face_location, type(target_face_location))
                     if face_tracker.center_location is not None:
-                        print("두명 탐지됨")
                         target_face_location = face_tracker.center_location  # 두명 이상일 때 두명의 가운데를 보기. 문제 찾기
 
                     _var = robot_control.run(_var, 
@@ -178,6 +181,7 @@ def main(video_src=2):
                 # print(robot_control.status)
                 if robot_control.status == 0 and len(face_tracker.known_faces.ages) == len(face_tracker.known_faces.names):
                     # 거리가 일정 거리 이하고, Detect된 얼굴 면적 차이가 일정 크기 이하일 경우 Select
+                    # social_relation_estimator.couple_not_cnt == None => 아무리 봐도 싱글
 
                     relevant_face_index = face_tracker.get_relevant_faces(target_face_index)
                     if len(relevant_face_index) >= 2:
@@ -189,6 +193,8 @@ def main(video_src=2):
                         if social_relation_estimator.couple_not_cnt > 15:
                             face_tracker.center_location = None
                             social_relation_estimator.couple_not_cnt = None
+
+
 
                     ages = [face_tracker.known_faces.ages[face_tracker.known_faces.index_in_data[i]] for i in relevant_face_index]
                     genders = [face_tracker.known_faces.genders[face_tracker.known_faces.index_in_data[i]] for i in relevant_face_index]

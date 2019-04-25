@@ -106,6 +106,7 @@ class RobotControl:
     def send(self, msg):
         if self.client_socket is not None:
             # print("Message sent to the robot.")
+            print("message:", msg)
             self.client_socket.send(msg.encode())
 
             return True
@@ -161,7 +162,7 @@ class RobotControl:
             3. 바운더리 바깥에서 접근할 시(센서값으로 바운더리인지 확인), 처음부터 빠르게 이동할 필요가 있음. (완)
             4. 타임 버퍼를 두어서 새로 발견된 타겟은 바로 추적하고, 따라잡았을 경우엔 움직이지 않게 해야함. (완)
             '''
-            movement_buffer = 0.12
+            movement_buffer = 0.06
 
             hor_direction = '11'
             ver_direction = '11'

@@ -43,7 +43,7 @@ class FaceTracker:
         '''
 
         self.known_faces = KnownFaces(data_remove_time)
-        self.scale = 0.25
+        self.scale = 0.25  # get_face_location와 맞추기
 
         self.face_locations = []  # A list of tuples of found face locations in css (top, right, bottom, left) order
         self.face_encodings = []
@@ -53,7 +53,7 @@ class FaceTracker:
         # self.data_remove_time = data_remove_time
 
         self.center_location = None
-        
+        self.unsample_num = 1
 
         # Load Age/Gender Classification Module
         self.enable_age_gender = enable_age_gender
@@ -61,7 +61,6 @@ class FaceTracker:
             self.emotion_model = EmotionNet()
             self.age_gender_model = LeviHassnerNet(image_size=face_size, model_path=age_gender_model_path)
             self.age_type = age_type
-            
 
     def _track(self, face_locations):
         _fl = []
@@ -148,21 +147,38 @@ class FaceTracker:
 
         return index
 
-    def get_relevant_faces(self, index, area_margin=20, distance_margin=5):
+    def get_relevant_faces(self, index, area_margin=60, distance_margin=4):
         _target_face_index = []
 
 
         _target_face_location = self.face_locations[index]
-        _target_face_area = self._get_box_area(_target_face_location)  # 방향 맞나 확인
+        _target_face_area = self._get_box_area(_target_face_location)  # 방향 맞나 확인 ok
         _target_face_width = _target_face_location[1] - _target_face_location[3]
         # print("Target face area", _target_face_area)
+        areas = []
         for i, b in enumerate(self.face_locations):
             _a = self._get_box_area(box_location=b)
             _d = self._get_box_distance(b1=_target_face_location, b2=b)
-            # print(_d, _a, _target_face_area)
-            if _target_face_area * (1+area_margin*0.01) > _a and _a > _target_face_area * (1-area_margin*0.01) and _d < _target_face_width * distance_margin:
+
+            areas.append(_a)
+            condition1 = _a > _target_face_area * (1-area_margin*0.01)
+            condition2 = _d < _target_face_width * distance_margin
+
+            if condition1 and condition2:
                 _target_face_index.append(i)
 
+            # if i == 1:
+            #     print("area cond:", condition1, "dist cond:", condition2)
+
+
+
+
+
+
+
+        print("number of relevat faces:", len(_target_face_index), end="\n\n\n")
+
+        # print("min area:", min(areas))
         return _target_face_index
 
     def get_center_location(self, indexes):
@@ -184,6 +200,7 @@ class FaceTracker:
     def run(self, frame, draw_on_img=True):
         self.known_faces.index_in_data = []
         # Resize frame of video to 1/4 size for faster face recognition processing
+
         small_frame = cv2.resize(frame, (0, 0), fx=self.scale, fy=self.scale)
 
 
@@ -197,7 +214,7 @@ class FaceTracker:
             # number_of_times_to_upsample가 높을수록 멀리 있는 얼굴 detect. 속도 느려짐
             # 경험상 3일때 2m~3m
             
-            self.face_locations = face_recognition.face_locations(rgb_small_frame, number_of_times_to_upsample=3)
+            self.face_locations = face_recognition.face_locations(rgb_small_frame, number_of_times_to_upsample=self.unsample_num)
             self.face_locations.sort(key=lambda x: x[3])
             
             # Get face images to get age and gender info
@@ -259,7 +276,7 @@ class FaceTracker:
                         name = Name(track_id)
 
                     self.known_faces.update_data(first_match_index, time.time(), name)
-                    print("처음아님 track_id:", track_id)
+                    # print("처음아님 track_id:", track_id)
 
                 else:
                     '''
@@ -324,7 +341,7 @@ class FaceTracker:
                         # 언제??
                         pass
 
-                print(self.known_faces.groups)
+                # print(self.known_faces.groups)
 
                 self.face_names.append(name)
                 # print("face names: ", self.face_names)

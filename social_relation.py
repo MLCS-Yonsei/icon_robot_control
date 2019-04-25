@@ -12,7 +12,7 @@ import random
 from random_utterance import RandomUtterance
 
 class SocialRelationEstimator:
-    def __init__(self, robot_control, update_flag=False, enable_speaker=True):
+    def __init__(self, robot_control, update_flag=False, enable_speaker=True, audio_off=False):
         # Todo190208
         # Stage 3에서 끝나고 나면 강제 랜덤 모션
         # 추적하다가 중도 포기할 알고리즘 2단계에서 다른 사람 등장..? Target_id로 구분?
@@ -25,7 +25,7 @@ class SocialRelationEstimator:
 
         1일 경우 기존에 tracking 하던게 있는지 우선으로 보고 갈 것.
         -> ID를 체크해서 계속 같은 대상들을 추적하고 있을 경우, 가장 누적된 것으로 발화 
-        '''   
+        '''
         self.status = 0
         self.couple_not_cnt = None
         self.wait_time = None
@@ -36,6 +36,8 @@ class SocialRelationEstimator:
         self.min_detect_cnt = 8
 
         self.msg = ""
+
+        self.audio_off = audio_off
 
         '''
         0 : 발화 전 
@@ -228,7 +230,7 @@ class SocialRelationEstimator:
             self.request_thread = None
 
             self.wait_time = time.time()
-            self.wait_secs = random.uniform(0.8, 1.2) # 대기할 시간
+            self.wait_secs = random.uniform(0.8, 1.2)  # 대기할 시간
         else:
             if self.emotion_flag == 1 and self.status != 3:
                 result = True
@@ -255,9 +257,11 @@ class SocialRelationEstimator:
         return result
 
     def _select_audio(self, relation):
+        if self.audio_off:
+            return
         print("Relation Check", self.current_relation, relation, self.current_relation == relation, "stage", self.stage)
         if self.target_face_id in self.tracked_ids and self.stage == 0:
-            print(123)
+
             # 마지막에 왔던 사람이 또 옴
             # 마지막 말고 역대로 추적했던 ID값을 다 가지고 있기 Todo
             if self.current_relation == relation:
@@ -281,6 +285,8 @@ class SocialRelationEstimator:
             
             if self.stage > 4:
                 self.stage = 5
+                # self.stage = 0
+
 
                 self.target_face_id = None
                 # print("All stage cleared. Random routine starts.")
