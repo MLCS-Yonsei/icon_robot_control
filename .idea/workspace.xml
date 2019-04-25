@@ -2,22 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c3c810d9-c062-4412-a623-44c61d7a5c0a" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/Conversation/files.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Conversation/one.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Conversation/scenarios.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Experiment/haarcascade_frontalface_alt.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Experiment/nodeDetection.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Stitching/images/left.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Stitching/images/right.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Stitching/pyimagesearch/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Stitching/pyimagesearch/basicmotiondetector.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Stitching/pyimagesearch/panorama.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Stitching/realtime_stitching.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/face_tracker.py" beforeDir="false" afterPath="$PROJECT_DIR$/face_tracker.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/robot_control.py" beforeDir="false" afterPath="$PROJECT_DIR$/robot_control.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/social_relation.py" beforeDir="false" afterPath="$PROJECT_DIR$/social_relation.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -27,86 +13,82 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="social_relation.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/social_relation.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1710">
-              <caret line="125" column="24" selection-start-line="125" selection-start-column="16" selection-end-line="125" selection-end-column="24" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="one.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Conversation/one.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="135">
-              <caret line="18" selection-start-line="18" selection-end-line="18" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="nodeDetection.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/Experiment/nodeDetection.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="221">
-              <caret line="55" column="19" lean-forward="true" selection-start-line="55" selection-start-column="19" selection-end-line="55" selection-end-column="19" />
-              <folding>
-                <element signature="e#0#10#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="main.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/main.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2355">
-              <caret line="164" column="10" selection-start-line="164" selection-start-column="10" selection-end-line="164" selection-end-column="10" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="face_tracker.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/face_tracker.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="5610">
-              <caret line="384" column="49" lean-forward="true" selection-start-line="384" selection-start-column="49" selection-end-line="384" selection-end-column="49" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="haarcascade_frontalface_alt.xml" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Experiment/haarcascade_frontalface_alt.xml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="365250">
-              <caret line="24350" selection-start-line="24350" selection-end-line="24350" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="files.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Conversation/files.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="135">
-              <caret line="18" column="70" selection-start-line="18" selection-start-column="70" selection-end-line="18" selection-end-column="70" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="scenarios.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Conversation/scenarios.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="420">
-              <caret line="37" selection-start-line="37" selection-end-line="37" />
-              <folding>
-                <element signature="e#0#9#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+    <splitter split-orientation="horizontal" split-proportion="0.5">
+      <split-first>
+        <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+          <file leaf-file-name="social_relation.py" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/social_relation.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="289">
+                  <caret line="185" column="46" lean-forward="true" selection-start-line="185" selection-start-column="46" selection-end-line="185" selection-end-column="46" />
+                  <folding>
+                    <element signature="e#0#9#0" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="main.py" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/main.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="429">
+                  <caret line="164" column="22" lean-forward="true" selection-start-line="164" selection-start-column="22" selection-end-line="164" selection-end-column="22" />
+                  <folding>
+                    <element signature="e#0#36#0" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="robot_speaker.py" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/robot_speaker.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state>
+                  <caret lean-forward="true" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="face_tracker.py" pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/face_tracker.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="453">
+                  <caret line="418" lean-forward="true" selection-start-line="418" selection-end-line="418" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+        </leaf>
+      </split-first>
+      <split-second>
+        <leaf>
+          <file leaf-file-name="main.py" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/main.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="1044">
+                  <caret line="195" lean-forward="true" selection-start-line="195" selection-end-line="195" />
+                  <folding>
+                    <element signature="e#0#36#0" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="nodeDetection.py" pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/Experiment/nodeDetection.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="504">
+                  <caret line="91" column="19" selection-start-line="91" selection-start-column="19" selection-end-line="91" selection-end-column="19" />
+                  <folding>
+                    <element signature="e#0#10#0" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+        </leaf>
+      </split-second>
+    </splitter>
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -117,13 +99,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>status ==</find>
-      <find>status &lt;</find>
-      <find>status = 3</find>
-      <find>request_thread</find>
-      <find>send_</find>
-      <find>routi</find>
-      <find>stage ==</find>
       <find>flag</find>
       <find>unsample_num</find>
       <find>print</find>
@@ -147,6 +122,13 @@
       <find>requests</find>
       <find>random</find>
       <find>wait</find>
+      <find>get_coords</find>
+      <find>rectang</find>
+      <find>gray</find>
+      <find>lk_params</find>
+      <find>movement_threshold</find>
+      <find>max_head_movement</find>
+      <find>font</find>
     </findStrings>
     <replaceStrings>
       <replace>4</replace>
@@ -167,7 +149,6 @@
         <option value="$USER_HOME$/Downloads/img_gt.txt" />
         <option value="$PROJECT_DIR$/random_utterance.py" />
         <option value="$PROJECT_DIR$/robot_control.py" />
-        <option value="$PROJECT_DIR$/face_tracker.py" />
         <option value="$PROJECT_DIR$/main.py" />
         <option value="$PROJECT_DIR$/social_relation.py" />
         <option value="$PROJECT_DIR$/httpReq.py" />
@@ -177,11 +158,13 @@
         <option value="$PROJECT_DIR$/Experiment/hi" />
         <option value="$PROJECT_DIR$/Experiment/haarcascade_frontalface_alt.xml" />
         <option value="$PROJECT_DIR$/Experiment/nodeDetection.py" />
+        <option value="$PROJECT_DIR$/face_tracker.py" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" fullScreen="true">
-    <option name="width" value="1920" />
+  <component name="ProjectFrameBounds" extendedState="6" fullScreen="true">
+    <option name="x" value="1007" />
+    <option name="width" value="913" />
     <option name="height" value="1080" />
   </component>
   <component name="ProjectView">
@@ -232,7 +215,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.nodeDetection">
+  <component name="RunManager" selected="Python.main">
     <configuration name="httpReq" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="KongVR" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -313,10 +296,10 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.main" />
         <item itemvalue="Python.nodeDetection" />
         <item itemvalue="Python.httpReq2" />
         <item itemvalue="Python.httpReq" />
-        <item itemvalue="Python.main" />
       </list>
     </recent_temporary>
   </component>
@@ -334,19 +317,19 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="775" y="0" width="1145" height="1080" extended-state="0" />
+    <frame x="0" y="0" width="1920" height="1080" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.20907474" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.13691416" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Event Log" order="7" side_tool="true" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.32935324" />
       <window_info anchor="bottom" id="Version Control" order="7" />
-      <window_info anchor="bottom" id="Python Console" order="7" weight="0.32965517" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.32935324" />
+      <window_info anchor="bottom" id="Python Console" order="7" weight="0.32935324" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="bottom" id="Terminal" order="7" weight="0.52689654" />
-      <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -358,21 +341,21 @@
     <layout-to-restore>
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.12374934" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="bottom" id="Version Control" order="10" />
       <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.32935324" />
-      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.32935324" />
+      <window_info anchor="bottom" id="Python Console" order="7" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Terminal" order="8" weight="0.32935324" />
       <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
-      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Version Control" order="10" />
+      <window_info anchor="bottom" id="Message" order="0" />
       <window_info id="Favorites" order="2" side_tool="true" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.32935324" />
-      <window_info anchor="bottom" id="Python Console" order="7" />
     </layout-to-restore>
   </component>
   <component name="VcsContentAnnotationSettings">
@@ -659,34 +642,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/robot_control.py">
+    <entry file="file://$PROJECT_DIR$/Experiment/haarcascade_frontalface_alt.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="165" lean-forward="true" selection-start-line="165" selection-end-line="165" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/robot_speaker.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-669">
-          <caret lean-forward="true" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Conversation/scenarios.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="420">
-          <caret line="37" selection-start-line="37" selection-end-line="37" />
-          <folding>
-            <element signature="e#0#9#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/social_relation.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1710">
-          <caret line="125" column="24" selection-start-line="125" selection-start-column="16" selection-end-line="125" selection-end-column="24" />
+        <state relative-caret-position="537">
+          <caret line="24350" selection-start-line="24350" selection-end-line="24350" />
         </state>
       </provider>
     </entry>
@@ -697,6 +656,33 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/robot_control.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret lean-forward="true" />
+          <folding>
+            <element signature="e#0#21#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Conversation/scenarios.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="537">
+          <caret line="37" selection-start-line="37" selection-end-line="37" />
+          <folding>
+            <element signature="e#0#9#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/robot_speaker.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret lean-forward="true" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/Conversation/one.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="135">
@@ -704,31 +690,37 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Experiment/haarcascade_frontalface_alt.xml">
+    <entry file="file://$PROJECT_DIR$/social_relation.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="365250">
-          <caret line="24350" selection-start-line="24350" selection-end-line="24350" />
+        <state relative-caret-position="289">
+          <caret line="185" column="46" lean-forward="true" selection-start-line="185" selection-start-column="46" selection-end-line="185" selection-end-column="46" />
+          <folding>
+            <element signature="e#0#9#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2355">
-          <caret line="164" column="10" selection-start-line="164" selection-start-column="10" selection-end-line="164" selection-end-column="10" />
+        <state relative-caret-position="1044">
+          <caret line="195" lean-forward="true" selection-start-line="195" selection-end-line="195" />
+          <folding>
+            <element signature="e#0#36#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/face_tracker.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="5610">
-          <caret line="384" column="49" lean-forward="true" selection-start-line="384" selection-start-column="49" selection-end-line="384" selection-end-column="49" />
+        <state relative-caret-position="453">
+          <caret line="418" lean-forward="true" selection-start-line="418" selection-end-line="418" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Experiment/nodeDetection.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="221">
-          <caret line="55" column="19" lean-forward="true" selection-start-line="55" selection-start-column="19" selection-end-line="55" selection-end-column="19" />
+        <state relative-caret-position="504">
+          <caret line="91" column="19" selection-start-line="91" selection-start-column="19" selection-end-line="91" selection-end-column="19" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
           </folding>

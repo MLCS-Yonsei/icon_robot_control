@@ -55,6 +55,23 @@ class FaceTracker:
         self.center_location = None
         self.unsample_num = 1
 
+        ## node detection
+        self.gesture_count = 10
+        self.face_center = None
+        self.lk_params = dict(winSize=(15, 15),
+                         maxLevel=2,
+                         criteria=(cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_COUNT, 10, 0.03))
+        self.x_movement = 0
+        self.y_movement = 0
+        self.gesture_threshold = 100
+        self.gesture = False
+        self.old_gray = None
+        self.ready = False
+
+
+
+
+
         # Load Age/Gender Classification Module
         self.enable_age_gender = enable_age_gender
         if enable_age_gender:
@@ -369,6 +386,47 @@ class FaceTracker:
                     _color = (255, 0, 0)
                 else:
                     _color = (0, 0, 255)
+
+
+                #node detection
+                center_coord = ((left + right) / 2, (top + bottom) / 2)
+                self.face_center = np.array([[center_coord]], np.float32)
+
+                frame_gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+                if self.ready:
+
+                    p1, st, err = cv2.calcOpticalFlowPyrLK(self.old_gray, frame_gray, self.face_center, None, **self.lk_params)
+                    self.old_gray = frame_gray.copy()
+
+                    a, b = self.get_coords(self.face_center), self.get_coords(p1)
+                    self.x_movement += abs(a[0] - b[0])
+                    self.y_movement += abs(a[1] - b[1])
+
+                    if self.x_movement > self.gesture_threshold:
+                        self.gesture = 'No'
+                    if self.y_movement > self.gesture_threshold and self.y_movement > self.x_movement:
+                        self.gesture = 'Yes'
+                    if self.gesture and self.gesture_count > 0:
+                        cv2.putText(frame, 'Gesture Detected: ' + self.gesture, (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1.2, (0, 0, 255), 3)
+                        self.gesture_count -= 1
+                    if self.gesture_count == 0:
+                        self.gesture = False
+                        self.x_movement = 0
+                        self.y_movement = 0
+                        self.gesture_count = 10  # number of frames a gesture is shown
+
+                    print("Gesture count", self.gesture_count)
+
+                    # print distance(get_coords(p0), get_coords(p1))
+                    self.face_center = p1
+                    cv2.circle(frame, self.get_coords(p1), 4, (0, 0, 255), -1)
+                    cv2.circle(frame, self.get_coords(self.face_center), 4, (255, 0, 0))
+                else:
+                    self.old_gray = frame_gray.copy()
+                    self.ready = True
+
+
+
                 # Draw a box around the face
                 cv2.rectangle(frame, (left, top), (right, bottom), _color, 3)
 
@@ -391,14 +449,10 @@ class FaceTracker:
         #     print(ex)
         #     print("Camera off")
 
-# moo_image = face_recognition.load_image_file("moo.png")
-# moo_face_encoding = face_recognition.face_encodings(moo_image)[0]
+    def get_coords(self, p1):
+        try:
+            return int(p1[0][0][0]), int(p1[0][0][1])
+        except:
+            return int(p1[0][0]), int(p1[0][1])
 
-# # Create arrays of known face encodings and their names
-# known_face_encodings = [
-#     moo_face_encoding
-# ]
-# known_face_names = [
-#     "Hwanmoo Yong"
-# ]
 
