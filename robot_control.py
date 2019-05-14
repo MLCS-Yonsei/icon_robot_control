@@ -26,12 +26,15 @@ def crop_img(img,target):
     return img[starty:endy,startx:endx]
 
 class RobotControl:
-    def __init__(self, robot_ip, client_socket):
+    def __init__(self, robot_ip, client_socket, virtual):
+        self.virtual = virtual
+
         self.robot_ip = robot_ip
         self.client_socket = client_socket
         self.robot_listen_q = queue.Queue()
 
         self.random_utterance = RandomUtterance(robot_ip, client_socket, self.robot_listen_q)
+        self.active_movement = False
 
         '''
         Robot Status
@@ -106,7 +109,7 @@ class RobotControl:
     def send(self, msg):
         if self.client_socket is not None:
             # print("Message sent to the robot.")
-            print("message:", msg)
+            # print("message:", msg)
             self.client_socket.send(msg.encode())
 
             return True

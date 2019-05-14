@@ -2,6 +2,7 @@ import os
 import glob
 import time
 import threading
+import pygame
 
 from io import BytesIO
 from zipfile import ZipFile
@@ -12,7 +13,7 @@ import random
 from random_utterance import RandomUtterance
 
 class SocialRelationEstimator:
-    def __init__(self, robot_control, update_flag=False, enable_speaker=True, audio_off=False):
+    def __init__(self, robot_control, update_flag=False, enable_speaker=True, audio_off=False, virtual=False):
         # Todo190208
         # Stage 3에서 끝나고 나면 강제 랜덤 모션
         # 추적하다가 중도 포기할 알고리즘 2단계에서 다른 사람 등장..? Target_id로 구분?
@@ -26,6 +27,8 @@ class SocialRelationEstimator:
         1일 경우 기존에 tracking 하던게 있는지 우선으로 보고 갈 것.
         -> ID를 체크해서 계속 같은 대상들을 추적하고 있을 경우, 가장 누적된 것으로 발화 
         '''
+        self.virtual = virtual
+
         self.status = 0
         self.couple_not_cnt = None
         self.wait_time = None
@@ -70,7 +73,7 @@ class SocialRelationEstimator:
 
         self.enable_speaker = enable_speaker
 
-        self.random_utterance = RandomUtterance(None, None, None)
+        self.random_utterance = RandomUtterance(None, None, None, virtual)
 
     def reset_emo_vars(self):
         self.emotion_flag = 0
@@ -117,26 +120,37 @@ class SocialRelationEstimator:
         return os.path.join('audio',file_name)
 
     def _send_play_request(self, path):
+        print("play request:", path)
         def request_thread(robot_ip, path):
+
             if robot_ip is not None and self.enable_speaker is True:
+
+                print("소리 재생중!!", path)
+                if self.virtual:
+                    pygame.mixer.init()
+                    sound = pygame.mixer.Sound(path)
+                    sound.play()
+                    return
+
                 url = "http://"+robot_ip+":3000/play"
-
                 querystring = {"path":path,"speaker":"MJ"}
-
                 response = requests.request("GET", url, params=querystring)
+
             else:
-                # print("TEST ENV. sleep for 1 secs", path)
+                print("TEST ENV. sleep for 1 secs", path)
                 time.sleep(1)
 
         if self.request_thread is None or not self.request_thread.isAlive():
+            print("12313123")
             self.request_thread = threading.Thread(target=request_thread, args=(self.robot_ip,path,))
             self.request_thread.start()
-            # 발화 시작, 종료 후 4로 전환하고 n초만큼 대기. 
+            print("12111111111")
+            # 발화 시작, 종료 후 4로 전환하고 n초만큼 대기.
             self.status = 3
 
     def emotion_routine_check(self):
         if self.stage == 2 and self.emotion_flag == 0:
-            # print("Emo routine starts")
+            print("Emo routine starts")
             # 감정 인식 시작 
             bypass_signal = False
             if len(self.emotions) == 1:
@@ -147,7 +161,7 @@ class SocialRelationEstimator:
                     bypass_signal = True
 
             if bypass_signal == True:
-                # print("Happiness Detected!")
+                print("Happiness Detected!")
                 target_files = glob.glob(os.path.join('audio','EMO4'+'*'))
                 if len(target_files) > 0:
                     # target_file_path = self._get_path(random.choice(target_files))
@@ -336,7 +350,7 @@ class SocialRelationEstimator:
         # else:
         #     # 형제/조카
         if self._check_status():
-            print("utterance_for_family", ages, genders, self.stage)
+            # print("utterance_for_family", ages, genders, self.stage)
             self._select_audio('FAM')
 
     def utterance_for_couple(self, ages, genders):
@@ -344,7 +358,7 @@ class SocialRelationEstimator:
         CPL1xx.wav
         '''
         if self._check_status():
-            print("utterance_for_couple", ages, genders, self.stage)
+            # print("utterance_for_couple", ages, genders, self.stage)
             self._select_audio('CPL')
 
     def utterance_for_friends(self, ages, genders):
@@ -352,7 +366,7 @@ class SocialRelationEstimator:
         FRD1xx.wav
         '''
         if self._check_status():
-            print("utterance_for_friends", ages, genders, self.stage)
+            # print("utterance_for_friends", ages, genders, self.stage)
             
             if ages[0] == "M":
                 self._select_audio('FRM')
@@ -364,7 +378,7 @@ class SocialRelationEstimator:
         KID1xx.wav
         '''
         if self._check_status():
-            print("utterance_for_kids", ages, genders, self.stage)
+            # print("utterance_for_kids", ages, genders, self.stage)
             self._select_audio('KID')
 
     def utterance_for_single(self, age, gender, emotion, emo_prob):

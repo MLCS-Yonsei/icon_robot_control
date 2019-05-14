@@ -5,7 +5,7 @@ import threading
 import requests
 
 class RandomUtterance:
-    def __init__(self, robot_ip, robot_socket, robot_listen_queue):   
+    def __init__(self, robot_ip, robot_socket, robot_listen_queue, virtual=False):
         '''
         Random Utterance 상황 flag
         0 : 초기 상태
@@ -14,6 +14,8 @@ class RandomUtterance:
 
         Flow : 0 -> 1 -> 2 (1 or 2회) -> (Face detect 여부 확인 후) 0 반복
         '''
+        self.virtual = virtual
+
         self.reset()
         self.enable_speaker = True
         self.robot_ip = robot_ip
@@ -138,6 +140,7 @@ class RandomUtterance:
 
     def _send_play_request(self):
         target_files = glob.glob(os.path.join('audio','RND'+'*'))
+        print("play audio:", target_files)
 
         if len(target_files) == 0:
             print("No random utterance files.")

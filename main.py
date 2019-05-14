@@ -8,6 +8,7 @@ import time
 import os
 
 # argv: 0 0 2 0
+# argv: video_src, robotip(1), 0, audio_off(0), virtual(1)
 
 
 def main(video_src=2):
@@ -26,7 +27,8 @@ def main(video_src=2):
         robot_ip = None
         client_socket = None
     else:
-        robot_ip = "192.168.0.53"
+        # robot_ip = "192.168.0.53"
+        robot_ip = "127.0.0.1"
         print("Connecting to robot", robot_ip)
         client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         client_socket.bind(("0.0.0.0", 0))
@@ -35,9 +37,10 @@ def main(video_src=2):
 
 
     audio_off = (sys.argv[4] == "0")
+    virtual = (sys.argv[5] == "1")
 
 
-    robot_control = RobotControl(robot_ip, client_socket)
+    robot_control = RobotControl(robot_ip, client_socket, virtual=virtual)
     robot_face = '05'
     target_face_index = None
     target_face_id_in_db = None
@@ -46,7 +49,7 @@ def main(video_src=2):
         _update_flag = True
     else:
         _update_flag = False
-        social_relation_estimator = SocialRelationEstimator(robot_control, update_flag=_update_flag, enable_speaker=True, audio_off=audio_off)
+        social_relation_estimator = SocialRelationEstimator(robot_control, update_flag=_update_flag, enable_speaker=True, audio_off=audio_off, virtual=virtual)
 
     while True:
         s_time = time.time()
@@ -139,7 +142,7 @@ def main(video_src=2):
                             target_face_index = None
                             target_face_id_in_db = None
                         else:
-                            print("Detecting..")
+                            # print("Detecting..")
                             move_flag = 1
 
                     elif time.time() - target_det_time > 5 and len(face_tracker.face_locations) == 0:
@@ -161,7 +164,7 @@ def main(video_src=2):
                     # print(target_face_location, type(target_face_location))
                     if face_tracker.center_location is not None:
                         target_face_location = face_tracker.center_location  # 두명 이상일 때 두명의 가운데를 보기. 문제 찾기
-
+                        print("center:", target_face_location)
                     _var = robot_control.run(_var, 
                                         robot_face, 
                                         target_name, 
