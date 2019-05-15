@@ -3,6 +3,7 @@ import random
 import glob, os
 import threading
 import requests
+import pyglet
 
 class RandomUtterance:
     def __init__(self, robot_ip, robot_socket, robot_listen_queue, virtual=False):
@@ -15,6 +16,7 @@ class RandomUtterance:
         Flow : 0 -> 1 -> 2 (1 or 2회) -> (Face detect 여부 확인 후) 0 반복
         '''
         self.virtual = virtual
+        self.sound_start_time = time.time()
 
         self.reset()
         self.enable_speaker = True
@@ -138,21 +140,39 @@ class RandomUtterance:
 
         return False
 
+    def _check_sound_running(self):
+        current_time = time.time()
+
+        return current_time - self.sound_start_time < 50
+
     def _send_play_request(self):
         target_files = glob.glob(os.path.join('audio','RND'+'*'))
-        print("play audio:", target_files)
 
         if len(target_files) == 0:
             print("No random utterance files.")
         else:
             path = random.choice(target_files)
+
+            self.sound_running = self._check_sound_running()
+            if self.virtual and not self.sound_running:
+                self.sound_start_time = time.time()
+                print("소리 재생중!!", path)
+                music = pyglet.resource.media(path)
+                music.play()
+                self.sound_running = True
+                return
+            return
             
             def request_thread(robot_ip, path):
                 if robot_ip is not None and self.enable_speaker is True:
+                    if self.virtual:
+                        print("소리 재생중!!", path)
+                        music = pyglet.resource.media(path)
+                        music.play()
+                        return
+
                     url = "http://"+robot_ip+":3000/play"
-
                     querystring = {"path":path,"speaker":"MJ"}
-
                     response = requests.request("GET", url, params=querystring)
                 else:
                     # print("TEST ENV. sleep for 1 secs", path)

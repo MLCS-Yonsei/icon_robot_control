@@ -9,7 +9,7 @@ import os
 
 # argv: 0 0 2 0
 # argv: video_src, robotip(1), 0, audio_off(0), virtual(1)
-
+# 0 1 0 1 1
 
 def main(video_src=2):
     # Initiate Face Tracker

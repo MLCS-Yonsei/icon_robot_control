@@ -106,10 +106,41 @@ class RobotControl:
                     'robot_hor_movement_time' : None,
                     'robot_ver_movement_time' : None
                 }
+
+
+    def dir_sig(self, direction, speed):
+
+        if direction == '01':
+            sig = '<'
+        elif direction == '10':
+            sig = '>'
+        else:
+            sig = '-'
+
+        return sig * int(speed)
+
+
+
     def send(self, msg):
         if self.client_socket is not None:
             # print("Message sent to the robot.")
-            # print("message:", msg)
+            print("message:", msg)
+            ##'STX', hor_direction, robot_speed, hor_head_direction, hor_speed, ver_direction, ver_speed, robot_face, 'ETX']
+            msg_str = msg.split('STX')[1].split('ETX')[0]
+            hor_dir = msg_str[0:2]
+
+            robot_spd = msg_str[2:5]
+            hor_head_dir = msg_str[5:7]
+            hor_spd = msg_str[7:10]
+            vir_dir = msg_str[10:12]
+            ver_spd = msg_str[12:15]
+            robot_face = msg[15:17]
+
+            hori_sig = self.dir_sig(hor_dir, robot_spd)
+            head_sig = self.dir_sig(hor_head_dir, hor_spd)
+
+            print("hori move:", hori_sig)
+            print("head move:", head_sig)
             self.client_socket.send(msg.encode())
 
             return True

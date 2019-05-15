@@ -2,7 +2,7 @@ import os
 import glob
 import time
 import threading
-import pygame
+import pyglet
 
 from io import BytesIO
 from zipfile import ZipFile
@@ -41,6 +41,8 @@ class SocialRelationEstimator:
         self.msg = ""
 
         self.audio_off = audio_off
+        self.sound_start_time = time.time()
+        self.sound_running = False
 
         '''
         0 : 발화 전 
@@ -119,18 +121,30 @@ class SocialRelationEstimator:
     def _get_path(self, file_name):
         return os.path.join('audio',file_name)
 
+    def _check_sound_running(self):
+        current_time = time.time()
+
+        return current_time - self.sound_start_time < 5
+
+
     def _send_play_request(self, path):
-        print("play request:", path)
+
+        self.sound_running = self._check_sound_running()
+        if self.virtual and not self.sound_running:
+
+            print("소리 재생 시작!!", path)
+            music = pyglet.resource.media(path)
+            music.play()
+            self.sound_start_time = time.time()
+            self.sound_running = True
+            return
+        else:
+            print("이미 소리 재생중..")
+            return
+
         def request_thread(robot_ip, path):
 
             if robot_ip is not None and self.enable_speaker is True:
-
-                print("소리 재생중!!", path)
-                if self.virtual:
-                    pygame.mixer.init()
-                    sound = pygame.mixer.Sound(path)
-                    sound.play()
-                    return
 
                 url = "http://"+robot_ip+":3000/play"
                 querystring = {"path":path,"speaker":"MJ"}
@@ -141,10 +155,8 @@ class SocialRelationEstimator:
                 time.sleep(1)
 
         if self.request_thread is None or not self.request_thread.isAlive():
-            print("12313123")
             self.request_thread = threading.Thread(target=request_thread, args=(self.robot_ip,path,))
             self.request_thread.start()
-            print("12111111111")
             # 발화 시작, 종료 후 4로 전환하고 n초만큼 대기.
             self.status = 3
 
@@ -274,11 +286,13 @@ class SocialRelationEstimator:
         if self.audio_off:
             return
         print("Relation Check", self.current_relation, relation, self.current_relation == relation, "stage", self.stage)
-        if self.target_face_id in self.tracked_ids and self.stage == 0:
+        # if self.target_face_id in self.tracked_ids and self.stage == 0:
+        if False:
 
             # 마지막에 왔던 사람이 또 옴
             # 마지막 말고 역대로 추적했던 ID값을 다 가지고 있기 Todo
             if self.current_relation == relation:
+
                 target_files = glob.glob(os.path.join('audio','REP'+'*'))
                 self._send_play_request(random.choice(target_files))
                 
