@@ -71,7 +71,7 @@ class Name:
         self.emotion = emotion
 
     def __str__(self):
-        return "ID: {}".format(self.track_id)
+        return "ID:{}, G:{}, A:{}, E: {}".format(self.track_id, self.gender, self.age, self.emotion)
 
     def to_text(self):
         return "ID:{}, G:{}, A:{}, E: {}".format(self.track_id, self.gender, self.age, self.emotion)

@@ -340,14 +340,14 @@ class FaceTracker:
                             emotion_prob = predicted_emotion_probs[face_index]
 
                             name = Name(track_id, gender, age, emotion)
-                            
+
                             self.known_faces.add_name(name, emotion_prob)
 
                         else:
                             # name = "ID:{}".format(track_id)
                             name = Name(track_id)
 
-
+                        print("여기에 한번이라도 들어와야하는데????? trackid:", name.track_id)
                         self.known_faces.add_data(time.time(), name, track_id)
 
 

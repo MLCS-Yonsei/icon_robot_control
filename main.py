@@ -81,25 +81,34 @@ def main(video_src=2):
                 random_utter_flag = robot_control.random_utterance.flag
                 if random_utter_flag == 2:
                     # 랜덤 멘트 재생중
+                    # print("111111111")
                     move_flag = 2
                 else:
+                    # print("222222222")
                     if len(face_tracker.face_locations) > 0:
+
                         # print(target_face_index, face_tracker.index_in_known_data)
                         if len(face_tracker.known_faces.index_in_data) > 0 and len(face_tracker.known_faces.index_in_data) == len(face_tracker.face_locations):
+
                             try:
+                                # print("33333333")
                                 # 현재 찾아낸 얼굴들의 순서를 기준으로 계속 타겟중인 얼굴의 ID가 몇번째에 위치하는지 찾기.
                                 target_face_index = face_tracker.known_faces.index_in_data.index(target_face_id_in_db)
-                                
+                                # print("44444444")
+                                # print("target face index:", target_face_index)
                                 # 현재 타겟의 이름
-                                target_face_id = face_tracker.known_faces.names[target_face_id_in_db].trackid
+                                print(len(face_tracker.known_faces.names))
+                                # target_face_id = face_tracker.known_faces.names[target_face_id_in_db].trackid
+                                target_face_id = face_tracker.known_faces.names[target_face_id_in_db].track_id
                                 # print('Target Face Name Id:',target_face_id)
-
+                                # print("555555555")
                                 # 현재 보이는 얼굴들의 순서에 DB의 ID값을 대입
                                 # visible_face_index_in_db과 face_tracker.index_in_known_data는 같은듯..? Todo 190208 (완) - 같음
                                 # visible_face_index_in_db = [face_tracker.index_in_known_data[i] for i, _ in enumerate(face_tracker.face_locations)]
 
                                 # print(visible_face_index_in_db)
                                 if target_face_id_in_db in face_tracker.known_faces.index_in_data:
+                                    print("I see you")
                                     # 현재 보이는 얼굴들에 기존 타겟이 있음.
                                     '''
                                     move_flag
@@ -107,16 +116,18 @@ def main(video_src=2):
                                     1: 목표가 보이지 않음 -> Slow Down
                                     2: 목표가 보이지 않고 새로운 대상 없음 -> Stop
                                     '''
+
                                     move_flag = 0
                                     target_face_location = face_tracker.face_locations[target_face_index]
+                                    print("target_face_location:",target_face_location)
                                     target_det_time = time.time()
                                 else:
                                     # 목표가 현재 보이지 않음.
                                     move_flag = 1
                             except:
-                                # print("target_face_id_in_db", target_face_id_in_db, face_tracker.index_in_known_data)
+                                print("target_face_id_in_db", target_face_id_in_db, face_tracker.known_faces.index_in_data)
                                 target_face_id = face_tracker.known_faces.names[target_face_id_in_db].track_id
-                                # print('Target Face Name Id:',target_face_id)
+                                print('Target Face Name Id:',target_face_id)
 
                                 for _vi, _visible_index in enumerate(face_tracker.known_faces.index_in_data):
                                     visible_face_id = face_tracker.known_faces.names[_visible_index].track_id
@@ -145,17 +156,23 @@ def main(video_src=2):
                             # print("Detecting..")
                             move_flag = 1
 
+
                     elif time.time() - target_det_time > 5 and len(face_tracker.face_locations) == 0:
                         # 5초 이상 목표가 보이지 않을 시
                         move_flag = 2
                         target_face_index = None
                         target_face_id_in_db = None
+                        print("66666666")
                     else:
                         move_flag = 1
+                        print("77777777")
+
                 # print("Move flag", move_flag)
 
+
                 try:
-                    target_name = face_tracker.known_face.names[target_face_id_in_db]
+                    target_name = str(face_tracker.known_faces.names[target_face_id_in_db])
+
                 except:
                     target_name = None
 
@@ -164,7 +181,8 @@ def main(video_src=2):
                     # print(target_face_location, type(target_face_location))
                     if face_tracker.center_location is not None:
                         target_face_location = face_tracker.center_location  # 두명 이상일 때 두명의 가운데를 보기. 문제 찾기
-                        print("center:", target_face_location)
+
+
                     _var = robot_control.run(_var, 
                                         robot_face, 
                                         target_name, 
@@ -179,6 +197,9 @@ def main(video_src=2):
                                         None, 
                                         frame,
                                         move_flag, social_relation_estimator)
+
+
+                print("robot run done\n\n")
 
                 # 관계 추정 부분 
                 # print(robot_control.status)
@@ -209,8 +230,9 @@ def main(video_src=2):
 
                     # Todo 190209 
                     # 특정 얼굴 크기 이상일때만 작동하게.
-
+                    print("befor running social relation:", target_face_id)
                     social_relation_estimator.run(detect_cnts, ages, genders, emotions, emotion_probs, target_face_id)
+                    print("relation esti done\n\n\n")
                     # print(min(detect_cnts))
                 # if done:
                     # Release handle to the webcam

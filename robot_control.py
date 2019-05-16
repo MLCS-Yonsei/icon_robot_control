@@ -33,7 +33,7 @@ class RobotControl:
         self.client_socket = client_socket
         self.robot_listen_q = queue.Queue()
 
-        self.random_utterance = RandomUtterance(robot_ip, client_socket, self.robot_listen_q)
+        self.random_utterance = RandomUtterance(robot_ip, client_socket, self.robot_listen_q, virtual=virtual)
         self.active_movement = False
 
         '''
@@ -117,7 +117,7 @@ class RobotControl:
         else:
             sig = '-'
 
-        return sig * int(speed)
+        return sig * int(int(speed)/10)
 
 
 

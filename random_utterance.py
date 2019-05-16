@@ -16,7 +16,7 @@ class RandomUtterance:
         Flow : 0 -> 1 -> 2 (1 or 2회) -> (Face detect 여부 확인 후) 0 반복
         '''
         self.virtual = virtual
-        self.sound_start_time = time.time()
+        self.sound_start_time = time.time() - 50
 
         self.reset()
         self.enable_speaker = True
@@ -127,12 +127,16 @@ class RandomUtterance:
                 #     self.wait_time = time.time() + 8 # 이 부분은 음성파일 길이만큼으로 조정 (플러스 버퍼시간)
                 #     self.cur_speak_cnt += 1
                 #     print("음성 재생 완료: 재생 횟수", self.cur_speak_cnt)
-                if self.request_thread is not None and not self.request_thread.isAlive():
+                # if self.request_thread is not None and not self.request_thread.isAlive():
+                if self.request_thread is not None:
                     # 발화 종료 
                     self.cur_speak_cnt += 1
                     self.request_thread = None
+                    print("random_utterance", "11111")
                 elif self.request_thread is None:
+                    print("random_utterance", "222222")
                     self._send_play_request()
+
 
             else:
                 # print("리셋")
@@ -142,8 +146,10 @@ class RandomUtterance:
 
     def _check_sound_running(self):
         current_time = time.time()
-
-        return current_time - self.sound_start_time < 50
+        running = (current_time - self.sound_start_time < 20)
+        if not running:
+            self.request_thread = None
+        return running
 
     def _send_play_request(self):
         target_files = glob.glob(os.path.join('audio','RND'+'*'))
@@ -154,22 +160,21 @@ class RandomUtterance:
             path = random.choice(target_files)
 
             self.sound_running = self._check_sound_running()
+            print("random running:", self.sound_running)
+            print("virtual:", self.virtual)
             if self.virtual and not self.sound_running:
                 self.sound_start_time = time.time()
                 print("소리 재생중!!", path)
                 music = pyglet.resource.media(path)
                 music.play()
                 self.sound_running = True
+                self.sound_start_time = time.time()
+                self.request_thread = "virtual thread"
                 return
             return
             
             def request_thread(robot_ip, path):
                 if robot_ip is not None and self.enable_speaker is True:
-                    if self.virtual:
-                        print("소리 재생중!!", path)
-                        music = pyglet.resource.media(path)
-                        music.play()
-                        return
 
                     url = "http://"+robot_ip+":3000/play"
                     querystring = {"path":path,"speaker":"MJ"}

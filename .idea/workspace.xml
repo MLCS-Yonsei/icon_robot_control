@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c3c810d9-c062-4412-a623-44c61d7a5c0a" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/sound.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Experiment/virtualServer.py" beforeDir="false" afterPath="$PROJECT_DIR$/Experiment/virtualServer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/face_tracker.py" beforeDir="false" afterPath="$PROJECT_DIR$/face_tracker.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/known_face.py" beforeDir="false" afterPath="$PROJECT_DIR$/known_face.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/random_utterance.py" beforeDir="false" afterPath="$PROJECT_DIR$/random_utterance.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/robot_control.py" beforeDir="false" afterPath="$PROJECT_DIR$/robot_control.py" afterDir="false" />
@@ -18,101 +18,82 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="social_relation.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/social_relation.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="217">
-              <caret line="63" column="26" selection-start-line="63" selection-start-column="13" selection-end-line="63" selection-end-column="26" />
-              <folding>
-                <element signature="e#0#9#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="main.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/main.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="349">
-              <caret line="25" column="26" lean-forward="true" selection-start-line="25" selection-start-column="26" selection-end-line="25" selection-end-column="26" />
-              <folding>
-                <element signature="e#0#36#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="face_tracker.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/face_tracker.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="252">
-              <caret line="339" column="32" selection-start-line="339" selection-start-column="32" selection-end-line="339" selection-end-column="32" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="multi_face_tracker.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/multi_face_tracker.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="256">
-              <caret line="334" column="38" selection-start-line="334" selection-start-column="38" selection-end-line="334" selection-end-column="38" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="virtualServer.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Experiment/virtualServer.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="60">
-              <caret line="4" lean-forward="true" selection-start-line="4" selection-end-line="4" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="random_utterance.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/random_utterance.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="427">
-              <caret line="174" column="59" selection-start-line="174" selection-start-column="59" selection-end-line="174" selection-end-column="59" />
-              <folding>
-                <element signature="e#0#11#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="robot_control.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/robot_control.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="348">
-              <caret line="454" column="20" lean-forward="true" selection-start-line="454" selection-start-column="20" selection-end-line="454" selection-end-column="20" />
-              <folding>
-                <element signature="e#0#21#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="manualMove.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Experiment/manualMove.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="193">
-              <caret line="33" column="17" lean-forward="true" selection-start-line="33" selection-start-column="17" selection-end-line="33" selection-end-column="17" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="sound.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/sound.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="75">
-              <caret line="5" column="16" lean-forward="true" selection-start-line="5" selection-start-column="16" selection-end-line="5" selection-end-column="16" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+    <splitter split-orientation="horizontal" split-proportion="0.5">
+      <split-first>
+        <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+          <file leaf-file-name="social_relation.py" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/social_relation.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="591">
+                  <caret line="379" column="32" lean-forward="true" selection-start-line="379" selection-start-column="32" selection-end-line="379" selection-end-column="32" />
+                  <folding>
+                    <element signature="e#0#9#0" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="main.py" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/main.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="332">
+                  <caret line="80" column="20" selection-start-line="80" selection-start-column="16" selection-end-line="80" selection-end-column="20" />
+                  <folding>
+                    <element signature="e#0#36#0" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="face_tracker.py" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/face_tracker.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="308">
+                  <caret line="235" column="12" lean-forward="true" selection-start-line="235" selection-start-column="12" selection-end-line="235" selection-end-column="12" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="known_face.py" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/known_face.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="895">
+                  <caret line="63" lean-forward="true" selection-start-line="63" selection-end-line="63" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="random_utterance.py" pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/random_utterance.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="306">
+                  <caret line="67" column="8" selection-start-line="67" selection-start-column="8" selection-end-line="67" selection-end-column="8" />
+                  <folding>
+                    <element signature="e#0#11#0" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+        </leaf>
+      </split-first>
+      <split-second>
+        <leaf>
+          <file leaf-file-name="robot_control.py" pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/robot_control.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="449">
+                  <caret line="185" column="82" lean-forward="true" selection-start-line="185" selection-start-column="82" selection-end-line="185" selection-end-column="82" />
+                  <folding>
+                    <element signature="e#0#21#0" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+        </leaf>
+      </split-second>
+    </splitter>
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -123,36 +104,36 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>()</find>
-      <find>_select_audio</find>
-      <find>_send_play_request</find>
-      <find>draw</find>
-      <find>position</find>
-      <find>result</find>
-      <find>put</find>
-      <find>robot_ip</find>
-      <find>message:</find>
       <find>utterance_for_single</find>
-      <find>sys.argv</find>
-      <find>enable_speaker</find>
-      <find>send_play</find>
-      <find>SocialRelationEstimator</find>
-      <find>RandomUtterance</find>
-      <find>RobotControl</find>
-      <find>소리</find>
-      <find>pygl</find>
+      <find>emotion_flag</find>
+      <find>stage = 0</find>
+      <find>current_relation</find>
+      <find>run</find>
+      <find>1111</find>
+      <find>def run</find>
+      <find>checking thread status</find>
       <find>sound_running</find>
-      <find>REP</find>
-      <find>재생</find>
-      <find>EMO3</find>
-      <find>still</find>
-      <find>message</find>
-      <find>Message</find>
-      <find>Message</find>
-      <find>Message sent</find>
-      <find>def send</find>
-      <find>send</find>
-      <find>self.send</find>
+      <find>uttran</find>
+      <find>_check_status</find>
+      <find>relation esti</find>
+      <find>22222</find>
+      <find>random</find>
+      <find>self.flag</find>
+      <find>random_utterance.res</find>
+      <find>flag</find>
+      <find>.speak_cnt</find>
+      <find>_send_play_request</find>
+      <find>randum</find>
+      <find>self.virtual</find>
+      <find>thread</find>
+      <find>checkint th</find>
+      <find>_check_sound_running</find>
+      <find>random_utter</find>
+      <find>robot</find>
+      <find>move_flag</find>
+      <find>RandomUtterance</find>
+      <find>reset</find>
+      <find>random_utterance</find>
     </findStrings>
     <replaceStrings>
       <replace>4</replace>
@@ -169,7 +150,6 @@
       <list>
         <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/src/sort/sort.py" />
-        <option value="$PROJECT_DIR$/known_face.py" />
         <option value="$USER_HOME$/Downloads/img_gt.txt" />
         <option value="$PROJECT_DIR$/httpReq.py" />
         <option value="$PROJECT_DIR$/httpReq3.py" />
@@ -180,26 +160,27 @@
         <option value="$PROJECT_DIR$/Experiment/nodeDetection.py" />
         <option value="$PROJECT_DIR$/Experiment/turtlePractice.py" />
         <option value="$PROJECT_DIR$/Experiment/manualMove.py" />
+        <option value="$PROJECT_DIR$/sound.py" />
+        <option value="$PROJECT_DIR$/Experiment/virtualServer.py" />
+        <option value="$PROJECT_DIR$/known_face.py" />
         <option value="$PROJECT_DIR$/face_tracker.py" />
         <option value="$PROJECT_DIR$/main.py" />
-        <option value="$PROJECT_DIR$/sound.py" />
-        <option value="$PROJECT_DIR$/random_utterance.py" />
-        <option value="$PROJECT_DIR$/Experiment/virtualServer.py" />
         <option value="$PROJECT_DIR$/social_relation.py" />
         <option value="$PROJECT_DIR$/robot_control.py" />
+        <option value="$PROJECT_DIR$/random_utterance.py" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" fullScreen="true">
-    <option name="width" value="1280" />
-    <option name="height" value="800" />
+  <component name="ProjectFrameBounds" extendedState="6" fullScreen="true">
+    <option name="x" value="742" />
+    <option name="width" value="1178" />
+    <option name="height" value="1080" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -212,10 +193,16 @@
               <item name="KongVR" type="462c0819:PsiDirectoryNode" />
               <item name="Experiment" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="KongVR" type="b2602c69:ProjectViewProjectNode" />
+              <item name="KongVR" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -373,17 +360,17 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="0" width="1280" height="800" extended-state="0" />
+    <frame x="364" y="0" width="1556" height="1080" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.16521049" />
+      <window_info content_ui="combo" id="Project" order="0" weight="0.108794786" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32935324" />
-      <window_info anchor="bottom" id="Event Log" order="7" side_tool="true" />
-      <window_info anchor="bottom" id="Version Control" order="7" weight="0.32935324" />
-      <window_info anchor="bottom" id="Python Console" order="7" weight="0.32689655" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.6165517" />
+      <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
+      <window_info anchor="bottom" id="Version Control" order="9" weight="0.32935324" />
+      <window_info anchor="bottom" id="Python Console" order="7" weight="0.23582089" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.6119403" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
-      <window_info anchor="bottom" id="Terminal" order="7" weight="0.52636814" />
+      <window_info anchor="bottom" id="Terminal" order="8" weight="0.52636814" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -394,25 +381,6 @@
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32935324" />
     </layout>
-    <layout-to-restore>
-      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.12374934" />
-      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
-      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
-      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
-      <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="bottom" id="Version Control" order="10" />
-      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.32935324" />
-      <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
-      <window_info anchor="bottom" id="Terminal" order="8" weight="0.32935324" />
-      <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
-      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
-      <window_info id="Favorites" order="2" side_tool="true" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.32935324" />
-      <window_info anchor="bottom" id="Python Console" order="7" />
-    </layout-to-restore>
   </component>
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
@@ -600,41 +568,6 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Stitching/pyimagesearch/panorama.py" />
     <entry file="file://$PROJECT_DIR$/Stitching/realtime_stitching.py" />
-    <entry file="file://$PROJECT_DIR$/src/levi_hassner.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="178">
-          <caret line="44" column="15" selection-start-line="44" selection-start-column="15" selection-end-line="44" selection-end-column="15" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/emotion_model.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="148">
-          <caret line="114" column="9" selection-start-line="114" selection-start-column="9" selection-end-line="114" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/emotion.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="185">
-          <caret line="65" lean-forward="true" selection-start-line="65" selection-end-line="65" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/sender.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="260">
-          <caret line="50" lean-forward="true" selection-start-line="50" selection-end-line="50" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/known_face.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="243">
-          <caret line="31" column="25" selection-start-line="31" selection-start-column="25" selection-end-line="31" selection-end-column="25" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Experiment/haarcascade_frontalface_alt.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="537">
@@ -704,17 +637,21 @@
     <entry file="file://$PROJECT_DIR$/Experiment/virtualServer.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="60">
-          <caret line="4" lean-forward="true" selection-start-line="4" selection-end-line="4" />
+          <caret line="4" selection-start-line="4" selection-end-line="4" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/random_utterance.py">
+    <entry file="file://$PROJECT_DIR$/src/levi_hassner.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="427">
-          <caret line="174" column="59" selection-start-line="174" selection-start-column="59" selection-end-line="174" selection-end-column="59" />
-          <folding>
-            <element signature="e#0#11#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="217">
+          <caret line="53" column="26" selection-start-line="53" selection-start-column="26" selection-end-line="53" selection-end-column="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/multi_face_tracker.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="11" column="63" selection-start-line="11" selection-start-column="58" selection-end-line="11" selection-end-column="63" />
         </state>
       </provider>
     </entry>
@@ -725,51 +662,82 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/Experiment/manualMove.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="103">
+          <caret line="27" lean-forward="true" selection-start-line="27" selection-end-line="27" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/emotion.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="528">
+          <caret line="71" column="57" selection-start-line="71" selection-start-column="57" selection-end-line="71" selection-end-column="57" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/emotion_model.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="288">
+          <caret line="126" column="31" lean-forward="true" selection-start-line="126" selection-start-column="31" selection-end-line="126" selection-end-column="31" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/sender.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="333">
+          <caret line="38" column="41" selection-start-line="38" selection-start-column="41" selection-end-line="38" selection-end-column="41" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/face_tracker.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="308">
+          <caret line="235" column="12" lean-forward="true" selection-start-line="235" selection-start-column="12" selection-end-line="235" selection-end-column="12" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="349">
-          <caret line="25" column="26" lean-forward="true" selection-start-line="25" selection-start-column="26" selection-end-line="25" selection-end-column="26" />
+        <state relative-caret-position="332">
+          <caret line="80" column="20" selection-start-line="80" selection-start-column="16" selection-end-line="80" selection-end-column="20" />
           <folding>
             <element signature="e#0#36#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/face_tracker.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="252">
-          <caret line="339" column="32" selection-start-line="339" selection-start-column="32" selection-end-line="339" selection-end-column="32" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/multi_face_tracker.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="256">
-          <caret line="334" column="38" selection-start-line="334" selection-start-column="38" selection-end-line="334" selection-end-column="38" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/social_relation.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="217">
-          <caret line="63" column="26" selection-start-line="63" selection-start-column="13" selection-end-line="63" selection-end-column="26" />
+        <state relative-caret-position="591">
+          <caret line="379" column="32" lean-forward="true" selection-start-line="379" selection-start-column="32" selection-end-line="379" selection-end-column="32" />
           <folding>
             <element signature="e#0#9#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Experiment/manualMove.py">
+    <entry file="file://$PROJECT_DIR$/known_face.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="193">
-          <caret line="33" column="17" lean-forward="true" selection-start-line="33" selection-start-column="17" selection-end-line="33" selection-end-column="17" />
+        <state relative-caret-position="895">
+          <caret line="63" lean-forward="true" selection-start-line="63" selection-end-line="63" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/random_utterance.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="306">
+          <caret line="67" column="8" selection-start-line="67" selection-start-column="8" selection-end-line="67" selection-end-column="8" />
+          <folding>
+            <element signature="e#0#11#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/robot_control.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="348">
-          <caret line="454" column="20" lean-forward="true" selection-start-line="454" selection-start-column="20" selection-end-line="454" selection-end-column="20" />
+        <state relative-caret-position="449">
+          <caret line="185" column="82" lean-forward="true" selection-start-line="185" selection-start-column="82" selection-end-line="185" selection-end-column="82" />
           <folding>
             <element signature="e#0#21#0" expanded="true" />
           </folding>

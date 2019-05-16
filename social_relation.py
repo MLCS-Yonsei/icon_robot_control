@@ -41,8 +41,10 @@ class SocialRelationEstimator:
         self.msg = ""
 
         self.audio_off = audio_off
-        self.sound_start_time = time.time()
+        self.sound_start_time = time.time() - 10
         self.sound_running = False
+
+
 
         '''
         0 : 발화 전 
@@ -123,13 +125,14 @@ class SocialRelationEstimator:
 
     def _check_sound_running(self):
         current_time = time.time()
-
-        return current_time - self.sound_start_time < 5
+        running = current_time - self.sound_start_time < 5
+        # if not running:
+        #     self.request_thread = None
+        return running
 
 
     def _send_play_request(self, path):
 
-        self.sound_running = self._check_sound_running()
         if self.virtual and not self.sound_running:
 
             print("소리 재생 시작!!", path)
@@ -137,6 +140,8 @@ class SocialRelationEstimator:
             music.play()
             self.sound_start_time = time.time()
             self.sound_running = True
+            self.status = 3
+            self.request_thread = "virtual thread"
             return
         else:
             print("이미 소리 재생중..")
@@ -249,7 +254,12 @@ class SocialRelationEstimator:
 
     def _check_status(self):
         result = False
-        if self.request_thread is not None and not self.request_thread.isAlive():
+        print("checking thread status")
+        self.sound_running = self._check_sound_running()
+        print("sound running:", self.sound_running)
+
+        # if self.request_thread is not None and not self.request_thread.isAlive():
+        if self.request_thread is not None and not self.sound_running:
             # 발화 종료됨. n초만큼 대기 후(status 4) status 2로 변경
             print("발화 종료")
             self.status = 4
@@ -310,7 +320,11 @@ class SocialRelationEstimator:
             else:
                 self.stage = 1
                 self.current_relation = relation
-            
+
+
+            print("current stage:", self.stage)
+
+
             if self.stage > 4:
                 self.stage = 5
                 # self.stage = 0
@@ -399,6 +413,7 @@ class SocialRelationEstimator:
         '''
         SGL1xx.wav
         '''
+        print("in the uttrance function")
 
         if self._check_status() and self.couple_not_cnt is None:
             print("utterance_for_single", age, gender, self.stage, self.emotion_flag)
