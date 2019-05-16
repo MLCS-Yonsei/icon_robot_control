@@ -42,7 +42,7 @@ class RandomUtterance:
         self.init_time = time.time()
         self.listen_time = time.time()
         self.wait_time = None
-        self.move_target_seconds = random.uniform(4.5, 7.5)
+        self.move_target_seconds = random.uniform(30, 60)
 
         self.request_thread = None
 
@@ -76,8 +76,8 @@ class RandomUtterance:
         #     _l_msg = self.robot_listen_q.get()
         #     print("Random", _l_msg)
         if self.flag == 0:
-            self.robot_hor_direction = random.choice(['10','01'])
-            self.robot_ver_direction = random.choice(['10','01'])
+            self.robot_hor_direction = random.choice(['10', '01'])
+            self.robot_ver_direction = random.choice(['10', '01'])
 
     def run(self):
         if self.flag == 0:

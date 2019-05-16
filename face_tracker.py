@@ -20,12 +20,12 @@ from known_face import *  # KnownFaces Name Group
 # specific demo. If you have trouble installing it, try any of the other demos that don't require it instead.
 
 class FaceTracker:
-    def __init__(self,  video_device_id=None, 
-                        enable_age_gender=True, 
-                        age_gender_model_path=None, 
+    def __init__(self,  video_device_id=None,
+                        enable_age_gender=True,
+                        age_gender_model_path=None,
                         face_size=256,
                         age_type="min",
-                        data_remove_time=3600):        
+                        data_remove_time=600):
         # Get a reference to webcam #0 (the default one)
         if video_device_id is not None:
             self.video_capture = cv2.VideoCapture(video_device_id)
@@ -386,45 +386,6 @@ class FaceTracker:
                     _color = (255, 0, 0)
                 else:
                     _color = (0, 0, 255)
-
-
-                #node detection
-                center_coord = ((left + right) / 2, (top + bottom) / 2)
-                self.face_center = np.array([[center_coord]], np.float32)
-
-                frame_gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-                if self.ready:
-
-                    p1, st, err = cv2.calcOpticalFlowPyrLK(self.old_gray, frame_gray, self.face_center, None, **self.lk_params)
-                    self.old_gray = frame_gray.copy()
-
-                    a, b = self.get_coords(self.face_center), self.get_coords(p1)
-                    self.x_movement += abs(a[0] - b[0])
-                    self.y_movement += abs(a[1] - b[1])
-
-                    if self.x_movement > self.gesture_threshold:
-                        self.gesture = 'No'
-                    if self.y_movement > self.gesture_threshold and self.y_movement > self.x_movement:
-                        self.gesture = 'Yes'
-                    if self.gesture and self.gesture_count > 0:
-                        cv2.putText(frame, 'Gesture Detected: ' + self.gesture, (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1.2, (0, 0, 255), 3)
-                        self.gesture_count -= 1
-                    if self.gesture_count == 0:
-                        self.gesture = False
-                        self.x_movement = 0
-                        self.y_movement = 0
-                        self.gesture_count = 10  # number of frames a gesture is shown
-
-                    print("Gesture count", self.gesture_count)
-
-                    # print distance(get_coords(p0), get_coords(p1))
-                    self.face_center = p1
-                    cv2.circle(frame, self.get_coords(p1), 4, (0, 0, 255), -1)
-                    cv2.circle(frame, self.get_coords(self.face_center), 4, (255, 0, 0))
-                else:
-                    self.old_gray = frame_gray.copy()
-                    self.ready = True
-
 
 
                 # Draw a box around the face

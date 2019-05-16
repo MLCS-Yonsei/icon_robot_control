@@ -134,6 +134,36 @@ class SocialRelationEstimator:
             # 발화 시작, 종료 후 4로 전환하고 n초만큼 대기. 
             self.status = 3
 
+    def active_movement(self):
+        def movement_thread(move):
+            directions = ('01', '10')
+            if move == 0:
+                for i in range(6):
+                    seq = i % 2
+                    hor_direction = directions[seq]
+                    robot_speed = '070'
+                    hor_head_direction = directions[seq+1]
+                    hor_speed = '070'
+                    ver_direction = '11'
+                    ver_speed = '050'
+                    robot_face = random.choice(['01', '02'])
+                    msg = "".join(
+                        ['STX', hor_direction, robot_speed, hor_head_direction, hor_speed, ver_direction, ver_speed, robot_face,
+                         'ETX'])
+
+                    self.robot_control.send(msg)
+
+            elif move == 1:
+                pass
+
+        move = random.randint(0, 0)
+        threading.Thread(target=movement_thread, args=(move,) ).start()
+
+
+
+
+
+
     def emotion_routine_check(self):
         if self.stage == 2 and self.emotion_flag == 0:
             # print("Emo routine starts")
@@ -354,7 +384,7 @@ class SocialRelationEstimator:
         if self._check_status():
             print("utterance_for_friends", ages, genders, self.stage)
             
-            if ages[0] == "M":
+            if genders[0] == "M":
                 self._select_audio('FRM')
             else:
                 self._select_audio('FRF')

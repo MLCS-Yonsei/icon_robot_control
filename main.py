@@ -152,7 +152,7 @@ def main(video_src=2):
                 # print("Move flag", move_flag)
 
                 try:
-                    target_name = face_tracker.known_face.names[target_face_id_in_db]
+                    target_name = face_tracker.known_faces.names[target_face_id_in_db]
                 except:
                     target_name = None
 
