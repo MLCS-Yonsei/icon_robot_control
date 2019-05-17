@@ -139,7 +139,7 @@ class SocialRelationEstimator:
 
             if self.active_move and self.stage == 3:
                 self.active_movement()
-                pass
+
 
     def active_movement(self):
         move = 0
@@ -151,7 +151,7 @@ class SocialRelationEstimator:
                 seq = i % 2
                 hor_direction = directions[seq]
                 robot_speed = '070'
-                hor_head_direction = directions[seq + 1]
+                hor_head_direction = directions[(seq + 1) % 2]
                 hor_speed = '070'
                 ver_direction = '11'
                 ver_speed = '050'
