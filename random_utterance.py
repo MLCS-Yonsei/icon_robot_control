@@ -38,7 +38,7 @@ class RandomUtterance:
         self.robot_ver_target_speed = random.randint(20, 40)
         self.robot_ver_prev_speed = 0
 
-        self.robot_face = '01'
+        self.robot_face = '04'
 
         self.init_time = time.time()
         self.listen_time = time.time()
@@ -63,7 +63,7 @@ class RandomUtterance:
         hor_speed = str(self.robot_head_hor_target_speed).zfill(3)
         ver_speed = str(self.robot_ver_prev_speed).zfill(3)
 
-        return "".join(['STX',self.robot_hor_direction,'020',self.robot_head_direction,'020','11',ver_speed, self.robot_face,'ETX'])
+        return "".join(['STX',self.robot_hor_direction,'030',self.robot_head_direction,'020','11',ver_speed, self.robot_face,'ETX'])
 
     def get_direction(self):
         # 로봇 정보를 받아올 수 없거나 0.5초 이상 정보가 없을때 Direction은 랜덤.
