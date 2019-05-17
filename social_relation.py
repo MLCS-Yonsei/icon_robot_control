@@ -39,6 +39,9 @@ class SocialRelationEstimator:
 
         self.audio_off = audio_off
 
+        self.active_move = True
+        self.sympathy = False
+
         '''
         0 : 발화 전 
         1 : Initiate Joint Attention
@@ -134,30 +137,60 @@ class SocialRelationEstimator:
             # 발화 시작, 종료 후 4로 전환하고 n초만큼 대기. 
             self.status = 3
 
-    def active_movement(self):
-        def movement_thread(move):
-            directions = ('01', '10')
-            if move == 0:
-                for i in range(6):
-                    seq = i % 2
-                    hor_direction = directions[seq]
-                    robot_speed = '070'
-                    hor_head_direction = directions[seq+1]
-                    hor_speed = '070'
-                    ver_direction = '11'
-                    ver_speed = '050'
-                    robot_face = random.choice(['01', '02'])
-                    msg = "".join(
-                        ['STX', hor_direction, robot_speed, hor_head_direction, hor_speed, ver_direction, ver_speed, robot_face,
-                         'ETX'])
-
-                    self.robot_control.send(msg)
-
-            elif move == 1:
+            if self.active_move and self.stage == 3:
+                self.active_movement()
                 pass
 
-        move = random.randint(0, 0)
-        threading.Thread(target=movement_thread, args=(move,) ).start()
+    def active_movement(self):
+        move = 0
+
+        directions = ('01', '10')
+        robot_face = random.choice(['01', '02'])
+        if move == 0:
+            for i in range(6):
+                seq = i % 2
+                hor_direction = directions[seq]
+                robot_speed = '070'
+                hor_head_direction = directions[seq + 1]
+                hor_speed = '070'
+                ver_direction = '11'
+                ver_speed = '050'
+                msg = "".join(
+                    ['STX', hor_direction, robot_speed, hor_head_direction, hor_speed, ver_direction, ver_speed,
+                     robot_face,
+                     'ETX'])
+
+                self.robot_control.send(msg)
+                time.sleep(0.6)
+
+        elif move == 1:
+            pass
+
+
+
+        #     directions = ('01', '10')
+        #     if move == 0:
+        #         for i in range(6):
+        #             seq = i % 2
+        #             hor_direction = directions[seq]
+        #             robot_speed = '070'
+        #             hor_head_direction = directions[seq+1]
+        #             hor_speed = '070'
+        #             ver_direction = '11'
+        #             ver_speed = '050'
+        #             robot_face = random.choice(['01', '02'])
+        #             msg = "".join(
+        #                 ['STX', hor_direction, robot_speed, hor_head_direction, hor_speed, ver_direction, ver_speed, robot_face,
+        #                  'ETX'])
+        #
+        #             self.robot_control.send(msg)
+        #             time.sleep(0.6)
+        #
+        #     elif move == 1:
+        #         pass
+        #
+        # move = 0
+        # threading.Thread(target=movement_thread, args=(move,)).start()
 
 
 
@@ -260,7 +293,7 @@ class SocialRelationEstimator:
             self.request_thread = None
 
             self.wait_time = time.time()
-            self.wait_secs = random.uniform(0.8, 1.2)  # 대기할 시간
+            self.wait_secs = random.uniform(1.2, 1.8)  # 대기할 시간
         else:
             if self.emotion_flag == 1 and self.status != 3:
                 result = True
@@ -331,7 +364,10 @@ class SocialRelationEstimator:
                 elif self.stage == 4:
                     target_files = glob.glob(os.path.join('audio','BYE'+'*'))
                 else:
-                    target_files = glob.glob(os.path.join('audio',relation+str(self.stage)+'*'))
+                    if self.sympathy and self.stage == 3:
+                        target_files = glob.glob(os.path.join('audio', relation + 'sympathy' + '*'))
+                    else:
+                        target_files = glob.glob(os.path.join('audio', relation + str(self.stage) + '*'))
                 if len(target_files) > 0:
                     # target_file_path = self._get_path(random.choice(target_files))
                     self._send_play_request(random.choice(target_files))

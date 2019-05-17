@@ -53,7 +53,7 @@ class FaceTracker:
         # self.data_remove_time = data_remove_time
 
         self.center_location = None
-        self.unsample_num = 1
+        self.unsample_num = 3
 
         ## node detection
         self.gesture_count = 10

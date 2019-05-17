@@ -26,6 +26,7 @@ class RandomUtterance:
         self.flag = 0
         self.robot_hor_direction = '11'
         self.robot_ver_direction = '11'
+        self.robot_head_direction = '11'  # 고개 좌우
 
         # 편의상 고개와 본체 좌우 움직임은 동기화
         self.robot_hor_target_speed = random.randint(70, 100)
@@ -41,7 +42,9 @@ class RandomUtterance:
 
         self.init_time = time.time()
         self.listen_time = time.time()
+        self.move_time = time.time()
         self.wait_time = None
+
         self.move_target_seconds = random.uniform(30, 60)
 
         self.request_thread = None
@@ -49,6 +52,7 @@ class RandomUtterance:
     def stop_robot(self):
         self.robot_hor_direction = '11'
         self.robot_ver_direction = '11'
+        self.robot_head_direction = '11'
 
         self.robot_hor_prev_speed = 0
         self.robot_head_hor_prev_speed = 0
@@ -59,7 +63,7 @@ class RandomUtterance:
         hor_speed = str(self.robot_head_hor_target_speed).zfill(3)
         ver_speed = str(self.robot_ver_prev_speed).zfill(3)
 
-        return "".join(['STX',self.robot_hor_direction,robot_speed,self.robot_hor_direction,hor_speed,self.robot_ver_direction,ver_speed,self.robot_face,'ETX'])
+        return "".join(['STX',self.robot_hor_direction,robot_speed,self.robot_head_direction,hor_speed,self.robot_ver_direction,ver_speed,self.robot_face,'ETX'])
 
     def get_direction(self):
         # 로봇 정보를 받아올 수 없거나 0.5초 이상 정보가 없을때 Direction은 랜덤.
@@ -94,7 +98,7 @@ class RandomUtterance:
                 self.robot_head_hor_prev_speed = self.robot_head_hor_prev_speed + int((self.robot_head_hor_target_speed - self.robot_head_hor_prev_speed) / 10)
                 self.robot_ver_prev_speed = self.robot_ver_prev_speed + int((self.robot_ver_target_speed - self.robot_ver_prev_speed) / 10)
 
-                self.get_direction()
+                # self.get_direction()
 
             else:
                 # 다 움직임
@@ -107,6 +111,16 @@ class RandomUtterance:
 
                 # Movement가 끝남
                 return True
+
+            if time.time() - self.move_time > 5:
+                self.robot_hor_direction = random.choice(['10', '01', '11', '11'])
+                if self.robot_hor_direction == '11':
+                    self.robot_head_direction = random.choice(['10', '01', '11'])
+
+                self.move_time = time.time()
+
+
+
         elif self.flag == 2:
             # print("Random Utterance, sleep for 8 seconds")
 

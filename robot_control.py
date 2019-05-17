@@ -360,7 +360,7 @@ class RobotControl:
             hor_speed = str(_var['hor_speed']['prev']).zfill(3)
             ver_speed = str(_var['ver_speed']['prev']).zfill(3)
 
-            _m = "".join(['STX',hor_direction,robot_speed,hor_direction,hor_speed,ver_direction,ver_speed,robot_face,'ETX'])
+            _m = "".join(['STX',hor_direction,robot_speed,hor_direction,hor_speed,'11',ver_speed,robot_face,'ETX'])
             # _m = "".join(['STX',hor_direction,robot_speed,hor_direction,'000',ver_direction,ver_speed,robot_face,'ETX'])
             self.random_utterance.reset()
 
