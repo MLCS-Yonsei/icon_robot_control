@@ -133,7 +133,8 @@ class RobotControl:
         6 울음
         '''
         if self.face_time is None or time.time() - self.face_time > 6:
-            self.robot_face = random.choice(['01', '02', '03', '04', '05', '06'])
+            # self.robot_face = random.choice(['01', '02', '03', '04', '05', '06'])
+            self.robot_face = random.choice(['03', '06'])
             self.face_time = time.time()
 
         _s = 0
