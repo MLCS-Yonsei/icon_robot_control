@@ -365,7 +365,7 @@ class SocialRelationEstimator:
                     target_files = glob.glob(os.path.join('audio','BYE'+'*'))
                 else:
                     if self.sympathy and self.stage == 3:
-                        target_files = glob.glob(os.path.join('audio', relation + 'sympathy' + '*'))
+                        target_files = glob.glob(os.path.join('audio', 'sympathy' + '*'))
                     else:
                         target_files = glob.glob(os.path.join('audio', relation + str(self.stage) + '*'))
                 if len(target_files) > 0:
