@@ -8,4 +8,5 @@ pretrained_models/emotion/emotion_model-30001.data-00000-of-00001
 pretrained_models/emotion/emotion_model-30001.index
 pretrained_models/emotion/emotion_model-30001.meta
 
+audio/*
 .Appledouble
