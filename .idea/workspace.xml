@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c3c810d9-c062-4412-a623-44c61d7a5c0a" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/random_utterance.py" beforeDir="false" afterPath="$PROJECT_DIR$/random_utterance.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/robot_control.py" beforeDir="false" afterPath="$PROJECT_DIR$/robot_control.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -79,8 +79,11 @@
       <file leaf-file-name="robot_control.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/robot_control.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="60">
-              <caret line="4" column="12" lean-forward="true" selection-start-line="4" selection-start-column="12" selection-end-line="4" selection-end-column="12" />
+            <state relative-caret-position="316">
+              <caret line="353" column="49" lean-forward="true" selection-start-line="353" selection-start-column="49" selection-end-line="353" selection-end-column="49" />
+              <folding>
+                <element signature="e#0#21#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -88,8 +91,8 @@
       <file leaf-file-name="random_utterance.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/random_utterance.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="280">
-              <caret line="65" column="106" selection-start-line="65" selection-start-column="106" selection-end-line="65" selection-end-column="106" />
+            <state relative-caret-position="278">
+              <caret line="64" lean-forward="true" selection-start-line="64" selection-end-line="64" />
               <folding>
                 <element signature="e#0#11#0" expanded="true" />
               </folding>
@@ -117,8 +120,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>move_fla</find>
-      <find>move_flag</find>
       <find>robot_con</find>
       <find>social_relation_estimator.</find>
       <find>status</find>
@@ -145,8 +146,10 @@
       <find>unsample</find>
       <find>unsample_num</find>
       <find>robot</find>
-      <find>msg</find>
       <find>send</find>
+      <find>_m</find>
+      <find>_m</find>
+      <find>msg</find>
     </findStrings>
     <replaceStrings>
       <replace>4</replace>
@@ -177,8 +180,8 @@
         <option value="$PROJECT_DIR$/Experiment/thth.py" />
         <option value="$PROJECT_DIR$/social_relation.py" />
         <option value="$PROJECT_DIR$/face_tracker.py" />
-        <option value="$PROJECT_DIR$/robot_control.py" />
         <option value="$PROJECT_DIR$/random_utterance.py" />
+        <option value="$PROJECT_DIR$/robot_control.py" />
       </list>
     </option>
   </component>
@@ -764,15 +767,18 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/robot_control.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="4" column="12" lean-forward="true" selection-start-line="4" selection-start-column="12" selection-end-line="4" selection-end-column="12" />
+        <state relative-caret-position="316">
+          <caret line="353" column="49" lean-forward="true" selection-start-line="353" selection-start-column="49" selection-end-line="353" selection-end-column="49" />
+          <folding>
+            <element signature="e#0#21#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/random_utterance.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="280">
-          <caret line="65" column="106" selection-start-line="65" selection-start-column="106" selection-end-line="65" selection-end-column="106" />
+        <state relative-caret-position="278">
+          <caret line="64" lean-forward="true" selection-start-line="64" selection-end-line="64" />
           <folding>
             <element signature="e#0#11#0" expanded="true" />
           </folding>
