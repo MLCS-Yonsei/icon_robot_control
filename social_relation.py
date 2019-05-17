@@ -145,7 +145,7 @@ class SocialRelationEstimator:
         move = 0
 
         directions = ('01', '10')
-        robot_face = random.choice(['01', '02'])
+        robot_face = random.choice(['04', '05'])
         if move == 0:
             for i in range(6):
                 seq = i % 2

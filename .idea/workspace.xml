@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c3c810d9-c062-4412-a623-44c61d7a5c0a" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/robot_control.py" beforeDir="false" afterPath="$PROJECT_DIR$/robot_control.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/random_utterance.py" beforeDir="false" afterPath="$PROJECT_DIR$/random_utterance.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/social_relation.py" beforeDir="false" afterPath="$PROJECT_DIR$/social_relation.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -13,11 +14,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="social_relation.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="social_relation.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/social_relation.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1046">
-              <caret line="93" column="43" lean-forward="true" selection-start-line="93" selection-start-column="43" selection-end-line="93" selection-end-column="43" />
+            <state relative-caret-position="404">
+              <caret line="41" column="31" lean-forward="true" selection-start-line="41" selection-start-column="31" selection-end-line="41" selection-end-column="31" />
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
               </folding>
@@ -58,24 +59,6 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="one.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Conversation/one.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="75">
-              <caret line="14" column="30" selection-start-line="14" selection-start-column="30" selection-end-line="14" selection-end-column="30" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="scenarios.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Conversation/scenarios.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="45">
-              <caret line="12" column="23" selection-start-line="12" selection-start-column="23" selection-end-line="12" selection-end-column="23" />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="robot_control.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/robot_control.py">
           <provider selected="true" editor-type-id="text-editor">
@@ -88,11 +71,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="random_utterance.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="random_utterance.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/random_utterance.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="278">
-              <caret line="64" lean-forward="true" selection-start-line="64" selection-end-line="64" />
+            <state relative-caret-position="322">
+              <caret line="158" column="32" selection-start-line="158" selection-start-column="26" selection-end-line="158" selection-end-column="32" />
               <folding>
                 <element signature="e#0#11#0" expanded="true" />
               </folding>
@@ -103,8 +86,8 @@
       <file leaf-file-name="manualControl.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Experiment/manualControl.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="498">
-              <caret line="94" column="27" selection-start-line="94" selection-start-column="27" selection-end-line="94" selection-end-column="27" />
+            <state relative-caret-position="231">
+              <caret line="59" column="26" lean-forward="true" selection-start-line="59" selection-start-column="26" selection-end-line="59" selection-end-column="26" />
             </state>
           </provider>
         </entry>
@@ -123,7 +106,6 @@
       <find>robot_con</find>
       <find>social_relation_estimator.</find>
       <find>status</find>
-      <find>choice</find>
       <find>robot_head</find>
       <find>robot_head_dire</find>
       <find>robot_hor_direction</find>
@@ -134,22 +116,23 @@
       <find>_select_audio</find>
       <find>self.reque</find>
       <find>moveme</find>
-      <find>active_movement</find>
       <find>stage</find>
       <find>str(self.</find>
       <find>_send_play_request</find>
-      <find>face</find>
       <find>robot_cont</find>
       <find>social</find>
       <find>robot_face</find>
       <find>RND</find>
       <find>unsample</find>
-      <find>unsample_num</find>
-      <find>robot</find>
-      <find>send</find>
       <find>_m</find>
       <find>_m</find>
       <find>msg</find>
+      <find>face</find>
+      <find>choice</find>
+      <find>robot</find>
+      <find>unsample_num</find>
+      <find>send</find>
+      <find>active_movement</find>
     </findStrings>
     <replaceStrings>
       <replace>4</replace>
@@ -178,10 +161,10 @@
         <option value="$PROJECT_DIR$/main.py" />
         <option value="$PROJECT_DIR$/Experiment/manualControl.py" />
         <option value="$PROJECT_DIR$/Experiment/thth.py" />
-        <option value="$PROJECT_DIR$/social_relation.py" />
         <option value="$PROJECT_DIR$/face_tracker.py" />
-        <option value="$PROJECT_DIR$/random_utterance.py" />
         <option value="$PROJECT_DIR$/robot_control.py" />
+        <option value="$PROJECT_DIR$/random_utterance.py" />
+        <option value="$PROJECT_DIR$/social_relation.py" />
       </list>
     </option>
   </component>
@@ -693,13 +676,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Conversation/one.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="75">
-          <caret line="14" column="30" selection-start-line="14" selection-start-column="30" selection-end-line="14" selection-end-column="30" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Experiment/nodeDetection.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="504">
@@ -714,23 +690,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Experiment/manualControl.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="498">
-          <caret line="94" column="27" selection-start-line="94" selection-start-column="27" selection-end-line="94" selection-end-column="27" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Experiment/thth.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="12" selection-start-line="12" selection-end-line="12" />
-          <folding>
-            <element signature="e#0#16#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/main.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-461">
@@ -738,6 +697,40 @@
           <folding>
             <element signature="e#0#36#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/robot_control.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="316">
+          <caret line="353" column="49" lean-forward="true" selection-start-line="353" selection-start-column="49" selection-end-line="353" selection-end-column="49" />
+          <folding>
+            <element signature="e#0#21#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Experiment/manualControl.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="231">
+          <caret line="59" column="26" lean-forward="true" selection-start-line="59" selection-start-column="26" selection-end-line="59" selection-end-column="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/random_utterance.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="322">
+          <caret line="158" column="32" selection-start-line="158" selection-start-column="26" selection-end-line="158" selection-end-column="32" />
+          <folding>
+            <element signature="e#0#11#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Conversation/one.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="14" column="30" selection-start-line="14" selection-start-column="30" selection-end-line="14" selection-end-column="30" />
         </state>
       </provider>
     </entry>
@@ -755,32 +748,22 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/Experiment/thth.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="12" selection-start-line="12" selection-end-line="12" />
+          <folding>
+            <element signature="e#0#16#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/social_relation.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1046">
-          <caret line="93" column="43" lean-forward="true" selection-start-line="93" selection-start-column="43" selection-end-line="93" selection-end-column="43" />
+        <state relative-caret-position="404">
+          <caret line="41" column="31" lean-forward="true" selection-start-line="41" selection-start-column="31" selection-end-line="41" selection-end-column="31" />
           <folding>
             <element signature="e#0#9#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/robot_control.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="316">
-          <caret line="353" column="49" lean-forward="true" selection-start-line="353" selection-start-column="49" selection-end-line="353" selection-end-column="49" />
-          <folding>
-            <element signature="e#0#21#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/random_utterance.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="278">
-          <caret line="64" lean-forward="true" selection-start-line="64" selection-end-line="64" />
-          <folding>
-            <element signature="e#0#11#0" expanded="true" />
           </folding>
         </state>
       </provider>
