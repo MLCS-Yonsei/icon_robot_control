@@ -39,7 +39,7 @@ class SocialRelationEstimator:
 
         self.audio_off = audio_off
 
-        self.active_move = True
+        self.active_move = False
         self.sympathy = False
 
         '''

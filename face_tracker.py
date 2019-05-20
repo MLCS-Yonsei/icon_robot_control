@@ -54,7 +54,6 @@ class FaceTracker:
 
         self.center_location = None
         self.unsample_num = 3
-
         ## node detection
         self.gesture_count = 10
         self.face_center = None
