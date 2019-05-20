@@ -3,13 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="c3c810d9-c062-4412-a623-44c61d7a5c0a" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Conversation/one.py" beforeDir="false" afterPath="$PROJECT_DIR$/Conversation/one.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/audio/sympathy1.m4a" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/audio/sympathy2.m4a" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/audio/sympathy3.m4a" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/audio/sympathy4.m4a" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/audio/sympathy5.m4a" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/robot_control.py" beforeDir="false" afterPath="$PROJECT_DIR$/robot_control.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/known_face.py" beforeDir="false" afterPath="$PROJECT_DIR$/known_face.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -23,7 +17,7 @@
       <file leaf-file-name="social_relation.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/social_relation.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="217">
+            <state relative-caret-position="5505">
               <caret line="378" column="44" selection-start-line="378" selection-start-column="40" selection-end-line="378" selection-end-column="44" />
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
@@ -32,11 +26,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="main.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="main.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="217">
-              <caret line="165" column="50" selection-start-line="165" selection-start-column="40" selection-end-line="165" selection-end-column="50" />
+            <state relative-caret-position="157">
+              <caret line="118" column="105" selection-start-line="118" selection-start-column="105" selection-end-line="118" selection-end-column="105" />
               <folding>
                 <element signature="e#0#36#0" expanded="true" />
               </folding>
@@ -47,20 +41,17 @@
       <file leaf-file-name="face_tracker.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/face_tracker.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="488">
-              <caret line="234" column="56" selection-start-line="234" selection-start-column="56" selection-end-line="234" selection-end-column="56" />
+            <state relative-caret-position="172">
+              <caret line="361" column="44" lean-forward="true" selection-start-line="361" selection-start-column="44" selection-end-line="361" selection-end-column="44" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="robot_control.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/robot_control.py">
+      <file leaf-file-name="known_face.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/known_face.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="502">
-              <caret line="136" column="45" selection-start-line="136" selection-start-column="45" selection-end-line="136" selection-end-column="45" />
-              <folding>
-                <element signature="e#0#21#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="825">
+              <caret line="55" column="34" selection-start-line="55" selection-start-column="25" selection-end-line="55" selection-end-column="34" />
             </state>
           </provider>
         </entry>
@@ -68,7 +59,7 @@
       <file leaf-file-name="random_utterance.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/random_utterance.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-181">
+            <state relative-caret-position="195">
               <caret line="17" column="34" selection-start-line="17" selection-start-column="34" selection-end-line="17" selection-end-column="34" />
               <folding>
                 <element signature="e#0#11#0" expanded="true" />
@@ -80,7 +71,7 @@
       <file leaf-file-name="manualControl.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Experiment/manualControl.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="217">
+            <state relative-caret-position="420">
               <caret line="28" column="3" selection-start-line="28" selection-end-line="28" selection-end-column="3" />
             </state>
           </provider>
@@ -97,9 +88,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>EMO</find>
-      <find>self.stage</find>
-      <find>_select_audio</find>
       <find>self.reque</find>
       <find>moveme</find>
       <find>stage</find>
@@ -108,7 +96,6 @@
       <find>social</find>
       <find>RND</find>
       <find>unsample</find>
-      <find>_m</find>
       <find>_m</find>
       <find>msg</find>
       <find>robot</find>
@@ -127,6 +114,10 @@
       <find>unsample_num</find>
       <find>.run</find>
       <find>robot_face</find>
+      <find>del</find>
+      <find>target_face_id_in_db</find>
+      <find>time()</find>
+      <find>remove</find>
     </findStrings>
     <replaceStrings>
       <replace>4</replace>
@@ -143,7 +134,6 @@
       <list>
         <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/src/sort/sort.py" />
-        <option value="$PROJECT_DIR$/known_face.py" />
         <option value="$USER_HOME$/Downloads/img_gt.txt" />
         <option value="$PROJECT_DIR$/httpReq.py" />
         <option value="$PROJECT_DIR$/httpReq3.py" />
@@ -160,10 +150,11 @@
         <option value="$PROJECT_DIR$/social_relation.py" />
         <option value="$PROJECT_DIR$/Conversation/one.py" />
         <option value="$PROJECT_DIR$/robot_control.py" />
+        <option value="$PROJECT_DIR$/known_face.py" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6" fullScreen="true">
+  <component name="ProjectFrameBounds" fullScreen="true">
     <option name="x" value="646" />
     <option name="width" value="634" />
     <option name="height" value="800" />
@@ -173,6 +164,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -199,7 +191,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -348,55 +339,45 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="0" width="1280" height="800" extended-state="0" />
+    <frame x="0" y="0" width="1280" height="800" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.15885623" />
-      <window_info anchor="bottom" id="TODO" order="6" weight="0.32935324" />
-      <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
-      <window_info anchor="bottom" id="Version Control" order="9" weight="0.32935324" />
-      <window_info anchor="bottom" id="Python Console" order="7" weight="0.23582089" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.6119403" />
-      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
-      <window_info anchor="bottom" id="Terminal" order="8" weight="0.52636814" />
-      <window_info id="Favorites" order="2" side_tool="true" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
-      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.13661636" />
+      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="Event Log" order="7" side_tool="true" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.32935324" />
       <window_info anchor="bottom" id="Version Control" order="7" />
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.13691416" />
+      <window_info active="true" anchor="bottom" id="Python Console" order="7" visible="true" weight="0.32827586" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info anchor="bottom" id="Terminal" order="7" weight="0.52689654" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info id="Favorites" order="2" side_tool="true" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
-      <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.32935324" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Event Log" order="7" side_tool="true" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
-      <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32935324" />
-      <window_info anchor="bottom" id="Terminal" order="7" weight="0.52689654" />
-      <window_info anchor="bottom" id="Python Console" order="7" weight="0.32935324" />
     </layout>
     <layout-to-restore>
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.12374934" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="Version Control" order="10" />
       <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.32935324" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.32935324" />
-      <window_info anchor="bottom" id="Python Console" order="7" />
+      <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Terminal" order="8" weight="0.32935324" />
       <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
-      <window_info anchor="bottom" id="Version Control" order="10" />
-      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.32935324" />
+      <window_info anchor="bottom" id="Python Console" order="7" />
     </layout-to-restore>
   </component>
   <component name="VcsContentAnnotationSettings">
@@ -683,13 +664,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/known_face.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="45">
-          <caret line="3" column="38" lean-forward="true" selection-start-line="3" selection-start-column="38" selection-end-line="3" selection-end-column="38" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Conversation/scenarios.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="45">
@@ -708,22 +682,19 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="180">
           <caret line="12" selection-start-line="12" selection-end-line="12" />
-          <folding>
-            <element signature="e#0#16#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Experiment/manualControl.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="217">
+        <state relative-caret-position="420">
           <caret line="28" column="3" selection-start-line="28" selection-end-line="28" selection-end-column="3" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/random_utterance.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-181">
+        <state relative-caret-position="195">
           <caret line="17" column="34" selection-start-line="17" selection-start-column="34" selection-end-line="17" selection-end-column="34" />
           <folding>
             <element signature="e#0#11#0" expanded="true" />
@@ -731,16 +702,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/face_tracker.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="488">
-          <caret line="234" column="56" selection-start-line="234" selection-start-column="56" selection-end-line="234" selection-end-column="56" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/social_relation.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="217">
+        <state relative-caret-position="5505">
           <caret line="378" column="44" selection-start-line="378" selection-start-column="40" selection-end-line="378" selection-end-column="44" />
           <folding>
             <element signature="e#0#9#0" expanded="true" />
@@ -748,22 +712,36 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/main.py">
+    <entry file="file://$PROJECT_DIR$/robot_control.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="217">
-          <caret line="165" column="50" selection-start-line="165" selection-start-column="40" selection-end-line="165" selection-end-column="50" />
+        <state relative-caret-position="232">
+          <caret line="123" lean-forward="true" selection-start-line="123" selection-end-line="123" />
           <folding>
-            <element signature="e#0#36#0" expanded="true" />
+            <element signature="e#0#21#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/robot_control.py">
+    <entry file="file://$PROJECT_DIR$/known_face.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="502">
-          <caret line="136" column="45" selection-start-line="136" selection-start-column="45" selection-end-line="136" selection-end-column="45" />
+        <state relative-caret-position="825">
+          <caret line="55" column="34" selection-start-line="55" selection-start-column="25" selection-end-line="55" selection-end-column="34" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/face_tracker.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="172">
+          <caret line="361" column="44" lean-forward="true" selection-start-line="361" selection-start-column="44" selection-end-line="361" selection-end-column="44" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/main.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="157">
+          <caret line="118" column="105" selection-start-line="118" selection-start-column="105" selection-end-line="118" selection-end-column="105" />
           <folding>
-            <element signature="e#0#21#0" expanded="true" />
+            <element signature="e#0#36#0" expanded="true" />
           </folding>
         </state>
       </provider>

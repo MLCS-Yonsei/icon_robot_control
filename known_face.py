@@ -57,7 +57,7 @@ class KnownFaces:
                 del self.names[i]
                 del new_times[i]
 
-        self.times = new_times
+        self.times = current_time
 
     def delete(self):
         pass
