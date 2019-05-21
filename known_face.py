@@ -51,13 +51,31 @@ class KnownFaces:
 
     def remove_olds(self, current_time):
         new_times = self.times
+        cnt = 0
         for i, time in enumerate(self.times):
             if current_time - time > self.data_remove_time:
-                del self.encodings[i]
-                del self.names[i]
-                del new_times[i]
+                self.encodings[i] = None
+                self.names[i] = None
+                new_times[i] = None
+                self.index_in_data[i] = None
+                cnt += 1
+        self.times = new_times
 
-        self.times = current_time
+        self.remove_nones(cnt)
+
+    def remove_nones(self, count):
+        en = []
+        nm = []
+        times = []
+        iid = []
+        for i in range(count):
+            if self.names[i] != None:
+                en.append(self.encodings[i])
+                nm.append(self.names[i])
+                times.append(self.times[i])
+                iid.append(self.index_in_data[i])
+
+
 
     def delete(self):
         pass
