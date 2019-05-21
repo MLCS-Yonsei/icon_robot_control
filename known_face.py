@@ -75,6 +75,11 @@ class KnownFaces:
                 times.append(self.times[i])
                 iid.append(self.index_in_data[i])
 
+        self.encodings = en
+        self.names = nm
+        self.times = times
+        self.index_in_data = iid
+
 
 
     def delete(self):
